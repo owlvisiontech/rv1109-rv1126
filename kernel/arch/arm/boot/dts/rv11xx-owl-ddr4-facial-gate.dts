@@ -1,0 +1,275 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ */
+/dts-v1/;
+#include "rv1126.dtsi"
+#include "rv1126-evb-v10.dtsi"
+/ {
+	model = "Rockchip RV1109 V12 FACIAL GATE Board";
+	compatible = "rockchip,rv1109-evb-ddr3-v12-facial-gate", "rockchip,rv1109";
+
+	chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";
+	};
+
+	pwmleds {
+		compatible = "pwm-leds";
+
+		pwmi_ir {
+			label = "PWM-IR";
+			pwms = <&pwm11 0 25000 0>;
+			max-brightness = <255>;
+		};
+	};
+};
+
+&pinctrl {
+    lcd_rst {
+        lcd_rst_gpio: lcd-rst-gpio {
+            rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+
+    dev_pwr {
+        dev_pwr_en: dev-pwr-en {
+            rockchip,pins = <4 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+};
+
+&pwm2 {
+	status = "okay";
+};
+
+&backlight {
+    pwms = <&pwm2 0 25000 0>;
+	status = "okay";
+};
+
+&vcc18_lcd_n {
+    gpio = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
+};
+
+&dsi {
+	status = "okay";
+
+	rockchip,lane-rate = <480>;
+	panel@0 {
+		compatible = "simple-panel-dsi";
+		reg = <0>;
+		backlight = <&backlight>;
+		power-supply = <&vcc18_lcd_n>;
+		prepare-delay-ms = <5>;
+		reset-delay-ms = <1>;
+		init-delay-ms = <80>;
+		disable-delay-ms = <10>;
+		unprepare-delay-ms = <5>;
+
+        reset-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_LOW>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&lcd_rst_gpio>;
+
+		width-mm = <107>;
+		height-mm = <172>;
+
+		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+			      MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_EOT_PACKET)>;
+		dsi,format = <MIPI_DSI_FMT_RGB888>;
+		dsi,lanes = <4>;
+
+		panel-init-sequence = [
+			39 01 04 b9 ff 83 94
+            39 00 11 BA 13 82 00 16 C5 00 10 FF 0F 24 03 21 24 25 20 08
+			39 00 12 b1 01 00 04 c4 03 12 f1 24 2c 3f 3f 47 02 00 e6 e2 a6
+			39 00 07 b2 00 c8 0e 30 00 81
+			39 00 20 b4 80 04 32 10 08 54 15 0f 22 10 08 47 43 44 0a 4b 43 44 02 55 55 02 06 44 06 5f 0a 6b 70 05 08
+			15 00 02 b6 45
+			39 00 37 d5 00 00 00 00 0a 00 01 22 00 22 66 11 01 01 23 45 67 9a bc aa bb 45 88 88 88 88 88 88 88 67 88 88 08 81 29 83 88 08 48 81 85 28 68 83 87 88 48 85 00 00 00 00 3c 01
+            15 00 02 cc 09
+			39 00 05 bf 06 02 10 04
+			39 00 05 c7 00 10 00 10
+			39 00 2b e0 00 08 0e 30 34 3f 1c 39 06 0c 0e 11 14 12 14 11 18 00 18 0e 30 34 3f 1c 39 06 0c 0e 11 14 12 14 11 18 0b 17 07 12 0b 17 07 12
+			39 00 03 c0 0c 17
+			39 00 03 c6 08 08
+			15 00 02 d4 32
+			15 00 02 BA 03
+            05 00 01 11
+            05 01 01 29
+		];
+
+		display-timings {
+			native-mode = <&timing0>;
+
+			timing0: timing0 {
+				clock-frequency = <75000000>;
+				hactive = <800>;
+				vactive = <1280>;
+				hfront-porch = <70>;
+				hsync-len = <20>;
+				hback-porch = <64>;
+				vfront-porch = <9>;
+				vsync-len = <2>;
+				vback-porch = <16>;
+				hsync-active = <0>;
+				vsync-active = <0>;
+				de-active = <0>;
+				pixelclk-active = <0>;
+			};
+		};
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				panel_in_dsi: endpoint {
+					remote-endpoint = <&dsi_out_panel>;
+				};
+			};
+		};
+	};
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@1 {
+			reg = <1>;
+			dsi_out_panel: endpoint {
+				remote-endpoint = <&panel_in_dsi>;
+			};
+		};
+	};
+};
+
+&csi_dphy0 {
+	ports {
+		port@0 {
+			mipi_in_ucam0: endpoint@1 {
+				/delete-property/ remote-endpoint;
+				data-lanes = <1 2>;
+			};
+		};
+	};
+};
+
+&csi_dphy1 {
+	ports {
+		port@0 {
+			csi_dphy1_input: endpoint@1 {
+				remote-endpoint = <&ucam_out1>;
+				data-lanes = <1 2>;
+			};
+		};
+		port@1 {
+			csi_dphy1_output: endpoint@0 {
+				remote-endpoint = <&isp_in>;
+				data-lanes = <1 2>;
+			};
+		};
+	};
+};
+
+&i2c1 {
+	/delete-node/ ar0230@10;
+	/delete-node/ ov4689@36;
+	/delete-node/ os04a10@36;
+	ov2718: ov2718@36 {
+		compatible = "ovti,ov2718";
+		reg = <0x36>;
+		clocks = <&cru CLK_MIPICSI_OUT>;
+		clock-names = "xvclk";
+		power-domains = <&power RV1126_PD_VI>;
+		pinctrl-names = "rockchip,camera_default";
+		pinctrl-0 = <&mipicsi_clk1>;
+		avdd-supply = <&vcc_avdd>;
+		dovdd-supply = <&vcc_dovdd>;
+		dvdd-supply = <&vcc_dvdd>;
+		pwd-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio2 RK_PA0 GPIO_ACTIVE_LOW>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "front";
+		rockchip,camera-module-name = "YT-RV1109-3-V1";
+		rockchip,camera-module-lens-name = "M43-4IR-2MP-F2";
+		ir-cut = <&cam_ircut0>;
+		port {
+			ucam_out1: endpoint {
+				remote-endpoint = <&csi_dphy1_input>;
+				data-lanes = <1 2>;
+			};
+		};
+	};
+
+	gc2053: gc2053@37 {
+		compatible = "galaxycore,gc2053";
+		reg = <0x37>;
+
+		clocks = <&cru CLK_MIPICSI_OUT>;
+		clock-names = "xvclk";
+
+		power-domains = <&power RV1126_PD_VI>;
+		pinctrl-names = "rockchip,camera_default";
+		pinctrl-0 = <&mipicsi_clk0>;
+		pwdn-gpios = <&gpio0 RK_PA0 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&gpio2 RK_PA1 GPIO_ACTIVE_LOW>;
+
+		avdd-supply = <&vcc_avdd>;
+		dovdd-supply = <&vcc_dovdd>;
+		dvdd-supply = <&vcc_dvdd>;
+
+		rockchip,camera-module-index = <0>;
+		rockchip,camera-module-facing = "front";
+		rockchip,camera-module-name = "YT-RV1109-2-V1";
+		rockchip,camera-module-lens-name = "40IR-2MP-F20";
+		port {
+			ucam_out0: endpoint {
+				remote-endpoint = <&mipi_in_ucam0>;
+				data-lanes = <1 2>;
+			};
+		};
+	};
+};
+
+&i2c5 {
+    status = "disable";
+};
+
+&mipi_csi2 {
+	status = "disabled";
+};
+
+&pwm11 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm11m1_pins_pull_down>;
+};
+
+&rk809 {
+	regulators {
+		vcc_dvdd: LDO_REG6 {
+			regulator-min-microvolt = <1300000>;
+			regulator-max-microvolt = <1300000>;
+		};
+
+		vcc_avdd: LDO_REG7 {
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+		};
+	};
+};
+
+&rkcif {
+	status = "disabled";
+};
+
+&rkisp {
+	ports {
+		port@0 {
+			isp_in: endpoint@0 {
+				remote-endpoint = <&csi_dphy1_output>;
+			};
+		};
+	};
+};
