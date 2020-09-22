@@ -79,16 +79,16 @@ RK的整个SDK的编译主要是由buildroot组织的，在使用之前请详细
 然后在弹出的界面里进行选择，完成后保存
 
 - 如果想单独编译某个库或者某个应用程序，在根目录执行<包的名字>-rebuild，例如
-> **./mm rkmedia\-rebuild**
+> **./mm.sh rkmedia\-rebuild**
 
 将会重新编译rkmedia
 
-> **./mm QFacialGate\-rebuild**
+> **./mm.sh QFacialGate\-rebuild**
 
 将会重新编译QFacialGate应用程序  
 最后要将文件系统打包或者将相关的可执行文件或库adb push到开发板上去
 
-> **./mm**
+> **./mm.sh**
 
 直接运行./mm.sh不加参数的话，默认等于在buildroot目录下执行make命令，也就是编译所有并打包，如果没有修改的话仅仅打包文件系统
 
