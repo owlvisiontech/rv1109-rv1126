@@ -7,7 +7,7 @@
 #include "rv1126-evb-v10.dtsi"
 / {
 	model = "Rockchip RV1109 V12 FACIAL GATE Board";
-	compatible = "rockchip,rv1109-evb-ddr3-v12-facial-gate", "rockchip,rv1109";
+	compatible = "rockchip,rv1109-evb-ddr3-v12-facial-gate", "rockchip,rv1126";
 
 	chosen {
 		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";
@@ -21,6 +21,17 @@
 			pwms = <&pwm11 0 25000 0>;
 			max-brightness = <255>;
 		};
+	};
+
+	vcc5v0_dev: vcc5v0-dev {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc5v0_dev";
+		gpio = <&gpio4 RK_PA1 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
 	};
 };
 
@@ -145,10 +156,17 @@
 };
 
 &csi_dphy0 {
+	status = "okay";
 	ports {
 		port@0 {
 			mipi_in_ucam0: endpoint@1 {
-				/delete-property/ remote-endpoint;
+				remote-endpoint = <&ucam_out0>;
+				data-lanes = <1 2>;
+			};
+		};
+		port@1 {
+			csidphy0_out: endpoint@0 {
+				remote-endpoint = <&mipi_csi2_input>;
 				data-lanes = <1 2>;
 			};
 		};
@@ -156,6 +174,7 @@
 };
 
 &csi_dphy1 {
+	status = "okay";
 	ports {
 		port@0 {
 			csi_dphy1_input: endpoint@1 {
@@ -236,8 +255,28 @@
     status = "disable";
 };
 
+/* isp cma buffer don't fiddle with it, dual camera(1920 * 1080) need 92M buffer */
+&isp_reserved {
+    size = <0x20000000>;
+};
+
 &mipi_csi2 {
-	status = "disabled";
+	status = "okay";
+	ports {
+		port@0 {
+			mipi_csi2_input: endpoint@1 {
+				remote-endpoint = <&csidphy0_out>;
+				data-lanes = <1 2>;
+			};
+		};
+
+		port@1 {
+			mipi_csi2_output: endpoint@0 {
+				remote-endpoint = <&cif_mipi_in>;
+				data-lanes = <1 2>;
+			};
+		};
+	};
 };
 
 &pwm11 {
@@ -260,11 +299,28 @@
 	};
 };
 
-&rkcif {
-	status = "disabled";
+&rkcif_mipi_lvds {
+	status = "okay";
+	port {
+		cif_mipi_in: endpoint {
+			remote-endpoint = <&mipi_csi2_output>;
+			data-lanes = <1 2>;
+		};
+	};
 };
 
-&rkisp {
+&rkcif_mipi_lvds_sditf {
+	status = "okay";
+
+	port {
+		cif_sditf: endpoint {
+			remote-endpoint = <&isp_virt1_in>;
+			data-lanes = <1 2 3 4>;
+		};
+	};
+};
+
+&rkisp_vir0 {
 	ports {
 		port@0 {
 			isp_in: endpoint@0 {
@@ -273,3 +329,36 @@
 		};
 	};
 };
+
+&rkisp_vir1 {
+	status = "okay";
+	ports {
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			isp_virt1_in: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&cif_sditf>;
+			};
+		};
+	};
+};
+
+&rkispp_vir1 {
+	status = "okay";
+};
+
+&rkispp {
+	status = "okay";
+	/* the max input w h and fps of mulit sensor */
+	max-input = <1920 1080 30>;
+};
+
+&uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&uart4m1_xfer>;
+};
+
