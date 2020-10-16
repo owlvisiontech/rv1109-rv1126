@@ -16,7 +16,7 @@ function show_notice()
 function apply_change()
 {
     echo -e "\033[32m=========>>>apply change\033[0m"
-    rsync -avzt ./* ../ --exclude=./vendor-patch.sh
+    rsync -avzt ./* --exclude="vendor-patch.sh" --exclude="LICENSE" --exclude="*.md" ../
     echo -e "\033[32m=========>>>apply change finished\033[0m"
 }
 
