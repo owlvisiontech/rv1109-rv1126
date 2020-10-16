@@ -30,17 +30,12 @@ RK的整个SDK的编译主要是由buildroot组织的，在使用之前请详细
     └── u-boot
 
 ##### 几个比较重要的目录
-
-- **kernel** --------内核源码和DTS在这里，编译完成输出的zboot.img在kernel根目录里，里面包含了kernel和dts，如果有改到dts，我们需要重新烧录这个映像文件
-
-
-- **buildroot**-----文件系统，库文件和一些APP都由这里组织编译，如果有改到APP和库或者有添加新的包的话需要重新编译单个模块，要看这里的详细编译规则
-
-
-- **external**------主要是一些rk或者第三方的包在这里，比如rkmedia，rknn，rockface，rockx等。
-
-
-- **app**-------------这里主要是针对不同产品形态提供的demo APP，并且开机自启动，比如开发板用到的QFacialGate就在这里
+| 路径        | 说明 |
+|-----------|----|
+| kernel    | 内核源码和DTS在这里，编译完成输出的zboot.img在kernel根目录里，里面包含了kernel和dts，如果有改到dts，我们需要重新烧录这个映像文件   |
+| buildroot | 文件系统，库文件和一些APP都由这里组织编译，如果有改到APP和库或者有添加新的包的话需要重新编译单个模块，要看这里的详细编译规则  |
+| external  | 主要是一些rk或者第三方的包在这里，比如rkmedia，rknn，rockface，rockx等   |
+| app       | 这里主要是针对不同产品形态提供的demo APP，并且开机自启动，比如开发板用到的QFacialGate就在这里  |
 
 ----------
 
