@@ -20,6 +20,11 @@ function apply_change()
     echo -e "\033[32m=========>>>apply change finished\033[0m"
 }
 
+function hot_fix()
+{
+    sed -i "s/ov2718->flip\ =\ 0;/ov2718->flip\ =\ OV2718_MIRROR;/g" `grep "ov2718->flip\ =\ 0;" -rl ../kernel/drivers/media/i2c/ov2718.c`
+}
+
 function confirm_change()
 {
     read -r -p "Are You Sure do that? [Y/n] " input
@@ -27,6 +32,7 @@ function confirm_change()
     case $input in
         [yY][eE][sS]|[yY])
             apply_change
+            hot_fix
             ;;
 
         [nN][oO]|[nN])
