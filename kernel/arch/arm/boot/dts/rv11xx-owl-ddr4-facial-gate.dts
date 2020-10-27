@@ -18,10 +18,25 @@
 
 		pwmi_ir {
 			label = "PWM-IR";
-			pwms = <&pwm11 0 25000 0>;
+			pwms = <&pwm5 0 25000 0>;
+			max-brightness = <255>;
+		};
+
+		pwmi_light {
+			label = "PWM-LIGHT";
+			pwms = <&pwm4 0 25000 0>;
 			max-brightness = <255>;
 		};
 	};
+
+    gpio-leds {
+        compatible = "gpio-leds";
+
+        relay {
+            label = "relay";
+            gpios = <&gpio2 RK_PB0 GPIO_ACTIVE_HIGH>;
+        };
+    };
 
 	vcc5v0_dev: vcc5v0-dev {
 		compatible = "regulator-fixed";
@@ -51,6 +66,12 @@
 
 &pwm2 {
 	status = "okay";
+};
+
+&pwm5 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm5m0_pins_pull_down>;
 };
 
 &backlight {
@@ -279,10 +300,10 @@
 	};
 };
 
-&pwm11 {
+&pwm4 {
 	status = "okay";
 	pinctrl-names = "active";
-	pinctrl-0 = <&pwm11m1_pins_pull_down>;
+	pinctrl-0 = <&pwm4m0_pins_pull_down>;
 };
 
 &rk809 {
