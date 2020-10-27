@@ -13,6 +13,15 @@ function show_notice()
     echo ""
 }
 
+function check_dir()
+{
+    if [ ! -d "$1" ]; then
+        echo -e "\033[31m Can't find $1 directory!\033[0m"
+        echo -e "\033[31m You should copy these under you SDK!\033[0m"
+        exit
+    fi
+}
+
 function apply_change()
 {
     echo -e "\033[32m=========>>>apply change\033[0m"
@@ -47,5 +56,8 @@ function confirm_change()
 }
 
 show_notice
+check_dir "../kernel"
+check_dir "../u-boot"
+check_dir "../device"
 confirm_change
 
