@@ -16,13 +16,19 @@
 
 #!/bin/bash
 
+SDK_TOP_DIR=".."
 BOARD_CONFIG_FILE="../device/rockchip/.BoardConfig.mk"
+
+RK_FG_DTS="rv1109-evb-ddr3-v12-facial-gate"
+OWL_FG_DTS="rv11xx-owl-ddr4-facial-gate"
+
+FG_BOARD_CONFIG="$SDK_TOP_DIR/device/rockchip/rv1126_rv1109/BoardConfig-facial_gate.mk"
 
 function show_notice()
 {
     echo ""
     echo -e "\033[32m===============Attention Please======================\033[0m"
-    echo "1) This script is from owlvtech instead of rockchip."
+    echo "1) From http://www.owlvision-tech.com instead of rockchip."
     echo "2) You should backup your own change."
     echo "2) We will copy some files or overrid some files."
     echo "3) All the source files are in this directory"
@@ -49,7 +55,10 @@ function apply_change()
 
 function hot_fix()
 {
-    sed -i "s/ov2718->flip\ =\ 0;/ov2718->flip\ =\ OV2718_MIRROR;/g" `grep "ov2718->flip\ =\ 0;" -rl ../kernel/drivers/media/i2c/ov2718.c`
+    sed -i "s/ov2718->flip\ =\ 0;/ov2718->flip\ =\ OV2718_MIRROR;/g" \
+        `grep "ov2718->flip\ =\ 0;" -rl $SDK_TOP_DIR/kernel/drivers/media/i2c/ov2718.c`
+    sed -i "s/$RK_FG_DTS/$OWL_FG_DTS/g" \
+        `grep "$RK_FG_DTS" -rl $FG_BOARD_CONFIG`
 }
 
 function confirm_change()
@@ -81,9 +90,9 @@ function reconfig_after_apply_patch()
 }
 
 show_notice
-check_dir "../kernel"
-check_dir "../u-boot"
-check_dir "../device"
+check_dir "$SDK_TOP_DIR/kernel"
+check_dir "$SDK_TOP_DIR/u-boot"
+check_dir "$SDK_TOP_DIR/device"
 confirm_change
 reconfig_after_apply_patch
 
