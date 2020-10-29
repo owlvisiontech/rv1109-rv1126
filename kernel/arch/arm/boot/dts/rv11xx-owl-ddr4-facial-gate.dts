@@ -17,13 +17,13 @@
 		compatible = "pwm-leds";
 
 		pwmi_ir {
-			label = "PWM-IR";
+			label = "ir";
 			pwms = <&pwm5 0 25000 0>;
 			max-brightness = <255>;
 		};
 
 		pwmi_light {
-			label = "PWM-LIGHT";
+			label = "light";
 			pwms = <&pwm4 0 25000 0>;
 			max-brightness = <255>;
 		};
