@@ -163,6 +163,7 @@
 		avdd-supply = <&vcc3v3_sys>;
 		dovdd-supply = <&vcc_1v8>;
 		dvdd-supply = <&vcc_dvdd>;
+		pd-gpios = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
 		pwd-gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
 		rockchip,camera-module-index = <1>;
