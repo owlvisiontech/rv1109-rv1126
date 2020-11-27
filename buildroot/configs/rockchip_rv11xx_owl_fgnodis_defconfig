@@ -49,15 +49,14 @@ BR2_PACKAGE_CALLFUNIPC=y
 BR2_PACKAGE_ISP2_IPC=y
 # BR2_PACKAGE_ALSA_UTILS_ALSAMIXER is not set
 BR2_PACKAGE_FFMPEG=y
-# BR2_PACKAGE_FFMPEG_FFMPEG is not set
-BR2_PACKAGE_FFMPEG_ENCODERS="aac adpcm_g726 pcm_alaw pcm_mulaw"
-BR2_PACKAGE_FFMPEG_DECODERS="aac adpcm_g726 pcm_alaw pcm_mulaw"
-BR2_PACKAGE_FFMPEG_MUXERS=""
-BR2_PACKAGE_FFMPEG_DEMUXERS=""
-BR2_PACKAGE_FFMPEG_PARSERS="aac"
-BR2_PACKAGE_FFMPEG_BSFS=""
-BR2_PACKAGE_FFMPEG_PROTOCOLS=""
-BR2_PACKAGE_FFMPEG_FILTERS=""
+BR2_PACKAGE_FFMPEG_ENCODERS="mp2 adpcm_g726 pcm_alaw pcm_mulaw rawvideo mjpeg mpeg2video"
+BR2_PACKAGE_FFMPEG_DECODERS="pcm_alaw pcm_mulaw rawvideo mjpeg mpeg2video"
+BR2_PACKAGE_FFMPEG_MUXERS="pcm_alaw pcm_mulaw g722 g726 adts rawvideo mjpeg mp4 mov rtp flv f4v mpegts matroska avi rtsp mpeg1system"
+BR2_PACKAGE_FFMPEG_DEMUXERS="pcm_alaw pcm_mulaw g722 g726 rawvideo mpegts mov flv matroska avi"
+BR2_PACKAGE_FFMPEG_PARSERS=""
+BR2_PACKAGE_FFMPEG_BSFS="aac_adtstoasc h264_metadata h264_mp4toannexb h264_redundant_pps hevc_metadata hevc_mp4toannexb dump_extradata remove_extradata"
+BR2_PACKAGE_FFMPEG_PROTOCOLS="file rtp srtp rtmp rtmps http https"
+BR2_PACKAGE_FFMPEG_FILTERS="scale"
 # BR2_PACKAGE_FFMPEG_INDEVS is not set
 # BR2_PACKAGE_FFMPEG_OUTDEVS is not set
 BR2_PACKAGE_BITSTREAM_VERA=y
