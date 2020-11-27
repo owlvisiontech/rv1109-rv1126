@@ -16,10 +16,25 @@
 
 #!/bin/bash
 
-RK_CFG_BUILDROOT=rockchip_rv1126_rv1109_facial_gate
-
+RK_BOARD_CONFIG=device/rockchip/.BoardConfig.mk
 BUILD_RET=0
 START_TIME=$(date +%s)
+
+RK_CFG_BUILDROOT=rockchip_rv11xx_owl_fgnodis
+# RK_CFG_BUILDROOT=rockchip_rv1126_rv1109_spi_nand
+
+if [ ! -f $RK_BOARD_CONFIG ]; then
+    echo "Please execut ./build.sh device/rockchip/rv1126_rv1109/BoardConfig-xxxx first"
+fi
+
+RK_CFG_BUILDROOT_LINE=`cat $RK_BOARD_CONFIG|grep RK_CFG_BUILDROOT`
+RK_CFG_BUILDROOT_VALUE=${RK_CFG_BUILDROOT_LINE#*=}
+
+echo $RK_CFG_BUILDROOT_VALUE
+
+if [ -n $RK_CFG_BUILDROOT_VALUE ]; then
+    RK_CFG_BUILDROOT=$RK_CFG_BUILDROOT_VALUE
+fi
 
 echo ""
 echo "=============Building Info======================"
