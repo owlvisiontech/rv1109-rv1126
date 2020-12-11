@@ -5,7 +5,7 @@
 
 /dts-v1/;
 
-#include "rv11xx-38x38-v10.dtsi"
+#include "rv11xx-owl-38ipc-v10.dtsi"
 
 / {
 	model = "Rockchip RV1109 38 V10 SPI NAND DDR3 Board";

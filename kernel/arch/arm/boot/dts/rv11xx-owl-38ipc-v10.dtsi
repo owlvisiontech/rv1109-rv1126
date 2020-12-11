@@ -158,12 +158,14 @@
 		   dvdd-supply = <&vcc_dvdd>;
 		   /* reset is always pulled high in v10 */
 		   reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+		   power-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+           pwdn-gpios = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
+           pd-gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;
 		   rockchip,camera-module-index = <1>;
 		   rockchip,camera-module-facing = "front";
 		   rockchip,camera-module-name = "YT10092";
 		   rockchip,camera-module-lens-name = "IR0147-50IRC-8M-F20";
 		   ir-cut = <&cam_ircut0>;
-		   flash-leds = <&flash_ir>;
 		   port {
 				   ucam_out0: endpoint {
 						   remote-endpoint = <&mipi_in_ucam0>;
@@ -171,7 +173,6 @@
 				   };
 		   };
 	};
-
 };
 
 &isp_reserved {
