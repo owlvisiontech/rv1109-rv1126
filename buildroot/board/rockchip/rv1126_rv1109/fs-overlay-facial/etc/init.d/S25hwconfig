@@ -1,0 +1,16 @@
+#!/bin/sh
+
+case "$1" in
+	start)
+         echo 255 > /sys/class/leds/ir/brightness
+		;;
+	stop)
+        echo 0 > /sys/class/leds/ir/brightness
+		printf "$0 stop finished\n"
+		;;
+	*)
+		echo "Usage: $0 {start|stop}"
+		exit 1
+		;;
+esac
+exit 0
