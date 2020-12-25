@@ -55,7 +55,7 @@ function apply_change()
 
 function hot_fix()
 {
-    sed -i "s/ov2718->flip\ =\ 0;/ov2718->flip\ =\ OV2718_MIRROR;/g" \
+    sed -i "s/ov2718->flip\ =\ 0;/ov2718->flip\ =\ OV2718_MIRROR\ |\ OV2718_FLIP;/g" \
         `grep "ov2718->flip\ =\ 0;" -rl $SDK_TOP_DIR/kernel/drivers/media/i2c/ov2718.c`
     sed -i "s/$RK_FG_DTS/$OWL_FG_DTS/g" \
         `grep "$RK_FG_DTS" -rl $FG_BOARD_CONFIG`
