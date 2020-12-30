@@ -103,6 +103,28 @@
 		regulator-min-microvolt = <825000>;
 		regulator-max-microvolt = <825000>;
 	};
+
+	i2s0_sound: i2s0-sound {
+		status = "okay";
+		compatible = "simple-audio-card";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,mclk-fs = <256>;
+		simple-audio-card,name = "rockchip,i2s0-sound";
+		simple-audio-card,cpu {
+			sound-dai = <&i2s0_8ch>;
+		};
+		simple-audio-card,codec {
+			sound-dai = <&es8311>;
+		};
+	};
+
+	wireless_wlan: wireless-wlan {
+		compatible = "wlan-platdata";
+		rockchip,grf = <&grf>;
+		wifi_chip_type = "USB-WiFi";
+		WIFI,poweren_gpio = <&gpio0 RK_PC0 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
 };
 
 &csi_dphy0 {
@@ -154,6 +176,18 @@
 	status = "okay";
 };
 
+&i2c0 {
+	status = "okay";
+
+	pcf8563: pcf8563@51 {
+		compatible = "pcf8563";
+		reg = <0x51>;
+		#clock-cells = <0>;
+		clock-frequency = <32768>;
+		clock-output-names = "xin32k";
+	};
+};
+
 &i2c1 {
 	status = "okay";
 	clock-frequency = <400000>;
@@ -186,6 +220,39 @@
 				   };
 		   };
 	};
+
+};
+
+&i2c4 {
+	status = "okay";
+	clock-frequency = <400000>;
+	pinctrl-0 = <&i2c4m1_xfer>;
+
+	es8311: es8311@18 {
+		compatible = "everest,es8311";
+		reg = <0x18>;
+		clocks = <&cru MCLK_I2S0_TX_OUT2IO>;
+		clock-names = "mclk";
+		adc-volume = <0xbf>;  /* 0dB */
+		dac-volume = <0xbf>;  /* 0dB */
+		aec-mode = "dac left, adc right";
+		pinctrl-names = "default";
+		pinctrl-0 = <&i2s0m0_mclk &spk_ctl>;
+		assigned-clocks = <&cru MCLK_I2S0_TX_OUT2IO>;
+		assigned-clock-parents = <&cru MCLK_I2S0_TX>;
+		spk-ctl-gpios = <&gpio2 RK_PA5 GPIO_ACTIVE_HIGH>;
+		#sound-dai-cells = <0>;
+	};
+};
+
+&i2s0_8ch {
+	status = "okay";
+	rockchip,clk-trcm = <1>;
+	#sound-dai-cells = <0>;
+	pinctrl-0 = <&i2s0m0_sclk_tx
+		     &i2s0m0_lrck_tx
+		     &i2s0m0_sdi0
+		     &i2s0m0_sdo0>;
 };
 
 &isp_reserved {
@@ -249,10 +316,16 @@
 		};
 	};
 
+	es8311 {
+		spk_ctl: spk-ctl {
+			rockchip,pins = <2 RK_PA5 0 &pcfg_pull_none>;
+		};
+	};
+
 	sdmmc-pwr {
 		/omit-if-no-ref/
 		sdmmc_pwr: sdmmc-pwr {
-			rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_up>;
+			rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 };
@@ -340,28 +413,33 @@
 	>;
 };
 
+&saradc {
+	status = "okay";
+	vref-supply = <&vcc_1v8>;
+};
+
 &sdmmc0_bus4 {
 	rockchip,pins =
 		/* sdmmc0_d0 */
-		<1 RK_PA4 1 &pcfg_pull_up_drv_level_2>,
+		<1 RK_PA4 1 &pcfg_pull_up_drv_level_0>,
 		/* sdmmc0_d1 */
-		<1 RK_PA5 1 &pcfg_pull_up_drv_level_2>,
+		<1 RK_PA5 1 &pcfg_pull_up_drv_level_0>,
 		/* sdmmc0_d2 */
-		<1 RK_PA6 1 &pcfg_pull_up_drv_level_2>,
+		<1 RK_PA6 1 &pcfg_pull_up_drv_level_0>,
 		/* sdmmc0_d3 */
-		<1 RK_PA7 1 &pcfg_pull_up_drv_level_2>;
+		<1 RK_PA7 1 &pcfg_pull_up_drv_level_0>;
 };
 
 &sdmmc0_clk {
 	rockchip,pins =
 		/* sdmmc0_clk */
-		<1 RK_PB0 1 &pcfg_pull_up_drv_level_2>;
+		<1 RK_PB0 1 &pcfg_pull_up_drv_level_3>;
 };
 
 &sdmmc0_cmd {
 	rockchip,pins =
 		/* sdmmc0_cmd */
-		<1 RK_PB1 1 &pcfg_pull_up_drv_level_2>;
+		<1 RK_PB1 1 &pcfg_pull_up_drv_level_0>;
 };
 
 &sdmmc {
@@ -376,5 +454,32 @@
 };
 
 &sfc {
+	status = "okay";
+};
+
+&soc_crit {
+	/* millicelsius */
+	temperature = <125000>;
+};
+
+&u2phy1 {
+	status = "okay";
+	u2phy_host: host-port {
+		status = "okay";
+	};
+};
+
+&uart3 {
+	wakeup-source;
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3m2_xfer &uart3m2_ctsn &uart3m2_rtsn>;
+	status = "okay";
+};
+
+&usb_host0_ehci {
+	status = "okay";
+};
+
+&usb_host0_ohci {
 	status = "okay";
 };
