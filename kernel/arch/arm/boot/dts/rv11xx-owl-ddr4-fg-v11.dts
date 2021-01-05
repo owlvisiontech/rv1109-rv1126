@@ -484,6 +484,14 @@
 			};
 		};
 	};
+
+	pcf8563: pcf8563@51 {
+		compatible = "pcf8563";
+		reg = <0x51>;
+		#clock-cells = <0>;
+		clock-frequency = <32768>;
+		clock-output-names = "xin32k";
+	};
 };
 
 &i2c5 {
