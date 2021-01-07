@@ -15,7 +15,7 @@ export RK_KERNEL_DEFCONFIG=rv1126_defconfig
 # Kernel defconfig fragment
 export RK_KERNEL_DEFCONFIG_FRAGMENT=
 # Kernel dts
-export RK_KERNEL_DTS= rv11xx-owl-38ipc-v10-imx307
+export RK_KERNEL_DTS=rv11xx-owl-38ipc-v10-imx307
 # boot image type
 export RK_BOOT_IMG=zboot.img
 # kernel image path
