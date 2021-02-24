@@ -19,6 +19,10 @@ media-ctl -p -d /dev/media1 | grep 2688x1520
 if [ $? -eq 0 ] ;then
     ln -s -f /oem/sysconfig-2K.db /oem/sysconfig.db
 fi
+media-ctl -p -d /dev/media1 | grep 2592x1944
+if [ $? -eq 0 ] ;then
+    ln -s -f /oem/sysconfig-1944P.db /oem/sysconfig.db
+fi
 media-ctl -p -d /dev/media1 | grep 1920x1080
 if [ $? -eq 0 ] ;then
     ln -s -f /oem/sysconfig-1080P.db /oem/sysconfig.db
