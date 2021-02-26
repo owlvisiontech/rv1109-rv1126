@@ -6,6 +6,8 @@ export RK_CHIP=RV1126
 export RK_ARCH=arm
 # Uboot defconfig
 export RK_UBOOT_DEFCONFIG=rv1126
+# Uboot defconfig fragment, config rk-sfc.config if sdcard upgrade
+export RK_UBOOT_DEFCONFIG_FRAGMENT=rk-sfc.config
 # Uboot update loader (spl)
 export RK_LOADER_UPDATE_SPL=true
 # Uboot image format type: fit(flattened image tree)
@@ -25,7 +27,9 @@ export RK_PARAMETER=parameter-fit-nand-256M.txt
 # Buildroot config
 export RK_CFG_BUILDROOT=rockchip_rv11xx_owl_spi_nand
 # Recovery config
-export RK_CFG_RECOVERY=
+export RK_CFG_RECOVERY=rockchip_rv1126_rv1109_spi_nand_recovery
+# Recovery image format type: fit(flattened image tree)
+export RK_RECOVERY_FIT_ITS=boot4recovery.its
 # ramboot config
 export RK_CFG_RAMBOOT=
 # Pcba config
@@ -51,28 +55,27 @@ export RK_OEM_BUILDIN_BUILDROOT=YES
 #userdata config, if not define this, system will format by RK_USERDATA_FS_TYPE
 export RK_USERDATA_DIR=
 #
-# RK_UBI_PAGE_SIZE and RK_UBI_BLOCK_SIZE MUST be defined if meet One of the following conditions:
-#
-# 1. define RK_OEM_DIR and undefine RK_OEM_BUILDIN_BUILDROOT
-# 2. define RK_USERDATA_DIR
-#
 # Set ubifs page size, 2048(2KB) or 4096(4KB)
+# Option.
 # export RK_UBI_PAGE_SIZE=2048
 #
 # Set ubifs block size, 0x20000(128KB) or 0x40000(256KB)
+# Option.
 # export RK_UBI_BLOCK_SIZE=0x20000
 #
 # Set userdata partition size (byte) if define RK_USERDATA_DIR
+# MUST, if userdata partition is grow partition.
 # export RK_USERDATA_PARTITION_SIZE=0x02760000
 #
-# Set oem partition size (byte) if undefine RK_OEM_BUILDIN_BUILDROOT
+# Set oem partition size (byte)
+# Option. if not set, it will get from parameter auto.
 # export RK_OEM_PARTITION_SIZE=0x6400000
 #
 #misc image
-export RK_MISC=
+export RK_MISC=blank-misc.img
 #choose enable distro module
 export RK_DISTRO_MODULE=
 # Define pre-build script for this board
 export RK_BOARD_PRE_BUILD_SCRIPT=app-build.sh
 # Define package-file for update.img
-export RK_PACKAGE_FILE=rv1109-package-file-spi-nand
+export RK_PACKAGE_FILE=rv1126-package-file-spi-nand
