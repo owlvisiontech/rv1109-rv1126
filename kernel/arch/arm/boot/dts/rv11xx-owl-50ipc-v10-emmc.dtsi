@@ -247,8 +247,10 @@
 		   avdd-supply = <&vcc3v3_sys>;
 		   dovdd-supply = <&vcc_1v8>;
 		   dvdd-supply = <&vcc_dvdd>;
-		   /* reset is always pulled high in v10 */
 		   reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+		   power-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+           pwdn-gpios = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
+           pd-gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;
 		   rockchip,camera-module-index = <1>;
 		   rockchip,camera-module-facing = "front";
 		   rockchip,camera-module-name = "YT10092";
@@ -501,11 +503,10 @@
 	};
 };
 
-&uart3 {
-	wakeup-source;
-	pinctrl-names = "default";
-	pinctrl-0 = <&uart3m2_xfer &uart3m2_ctsn &uart3m2_rtsn>;
-	status = "okay";
+&uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&uart4m1_xfer>;
 };
 
 &usb_host0_ehci {
