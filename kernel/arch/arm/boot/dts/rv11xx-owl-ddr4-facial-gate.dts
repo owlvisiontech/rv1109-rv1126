@@ -81,6 +81,7 @@
 
 &vcc18_lcd_n {
     gpio = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
+    vin-supply = <&vcc3v3_sys>;
 };
 
 &dsi {
