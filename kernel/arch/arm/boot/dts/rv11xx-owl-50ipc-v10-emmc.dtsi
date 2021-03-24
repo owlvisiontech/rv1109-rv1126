@@ -61,19 +61,15 @@
 		regulator-init-microvolt = <825000>;
 		regulator-always-on;
 		regulator-boot-on;
-		regulator-settling-time-up-us = <250>;
+		regulator-s2ttling-time-up-us = <250>;
 		pwm-supply = <&vcc3v3_sys>;
 		status = "okay";
 	};
 
-	/*
-	 * pwm1 is reserved as voltage adjustment in hardware
-	 * use fixed regulator to avoid voltage adjustment by software
-	 */
-	vdd_logic_npu_vepu: vdd-logic-npu-vepu {
+	vdd_npu: vdd-npu {
 		compatible = "pwm-regulator";
 		pwms = <&pwm1 0 5000 1>;
-		regulator-name = "vdd_logic_npu_vepu";
+		regulator-name = "vdd_npu";
 		regulator-min-microvolt = <720000>;
 		regulator-max-microvolt = <880000>;
 		regulator-init-microvolt = <825000>;
@@ -84,13 +80,18 @@
 		status = "okay";
 	};
 
-	vdd_logic_npu_vepu_fixed: vdd-logic-npu-vepu-fixed {
-		compatible = "regulator-fixed";
-		regulator-name = "vdd_logic_npu_vepu-fixed";
+	vdd_vepu: vdd-vepu {
+		compatible = "pwm-regulator";
+		pwms = <&pwm2 0 5000 1>;
+		regulator-name = "vdd_vepu";
+		regulator-min-microvolt = <650000>;
+		regulator-max-microvolt = <950000>;
+		regulator-init-microvolt = <800000>;
 		regulator-always-on;
 		regulator-boot-on;
-		regulator-min-microvolt = <825000>;
-		regulator-max-microvolt = <825000>;
+		regulator-settling-time-up-us = <250>;
+		pwm-supply = <&vcc5v0_sys>;
+		status = "okay";
 	};
 
 	adc-keys {
@@ -149,6 +150,24 @@
 		WIFI,poweren_gpio = <&gpio0 RK_PC0 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
+};
+
+&pwm0 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm0m0_pins_pull_down>;
+};
+
+&pwm1 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm1m0_pins_pull_down>;
+};
+
+&pwm2 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm2m0_pins_pull_down>;
 };
 
 &csi_dphy0 {
@@ -344,7 +363,7 @@
 };
 
 &npu {
-	npu-supply = <&vdd_logic_npu_vepu_fixed>;
+	npu-supply = <&vdd_npu>;
 };
 
 &npu_opp_table {
@@ -436,7 +455,7 @@
 };
 
 &rkvenc {
-	venc-supply = <&vdd_logic_npu_vepu_fixed>;
+	venc-supply = <&vdd_vepu>;
 };
 
 &rockchip_suspend {
