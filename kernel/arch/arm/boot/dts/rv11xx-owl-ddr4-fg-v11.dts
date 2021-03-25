@@ -486,13 +486,21 @@
 		};
 	};
 
-	pcf8563: pcf8563@51 {
-		compatible = "pcf8563";
-		reg = <0x51>;
-		#clock-cells = <0>;
-		clock-frequency = <32768>;
-		clock-output-names = "xin32k";
-	};
+    hym8563: hym8563@51 {
+        compatible = "haoyu,hym8563";
+        reg = <0x51>;
+
+        #clock-cells = <0>;
+        clock-frequency = <32768>;
+        clock-output-names = "xin32k";
+    };
+};
+
+&i2c3 {
+    status = "okay";
+    clock-frequency = <400000>;
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c3m2_xfer>;
 };
 
 &i2c5 {
@@ -606,3 +614,7 @@
     pinctrl-0 = <&uart4m1_xfer>;
 };
 
+&sdio_pwrseq{
+    clocks = <&hym8563>;
+    clock-names = "ext_clock";
+};
