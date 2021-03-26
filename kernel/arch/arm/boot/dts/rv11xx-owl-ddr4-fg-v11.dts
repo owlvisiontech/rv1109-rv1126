@@ -4,7 +4,7 @@
  */
 /dts-v1/;
 #include "rv1126.dtsi"
-#include "rv1126-evb-v10.dtsi"
+#include "rv1126-owl-evb-v10.dtsi"
 / {
 	model = "Rockchip RV1109 V12 FACIAL GATE Board";
 	compatible = "rockchip,rv1109-evb-ddr3-v12-facial-gate", "rockchip,rv1126";
@@ -428,9 +428,6 @@
 };
 
 &i2c1 {
-	/delete-node/ ar0230@10;
-	/delete-node/ ov4689@36;
-	/delete-node/ os04a10@36;
 	ov2718: ov2718@36 {
 		compatible = "ovti,ov2718";
 		reg = <0x36>;
@@ -448,7 +445,6 @@
 		rockchip,camera-module-facing = "front";
 		rockchip,camera-module-name = "YT-RV1109-3-V1";
 		rockchip,camera-module-lens-name = "M43-4IR-2MP-F2";
-		ir-cut = <&cam_ircut0>;
 		port {
 			ucam_out1: endpoint {
 				remote-endpoint = <&csi_dphy1_input>;
