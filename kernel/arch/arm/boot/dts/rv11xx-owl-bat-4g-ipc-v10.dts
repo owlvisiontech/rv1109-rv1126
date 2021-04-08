@@ -1,0 +1,155 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ */
+/dts-v1/;
+#include "rv1126.dtsi"
+#include "rv1126-owl-evb-v10.dtsi"
+/ {
+	model = "Rockchip RV1109 V12 FACIAL GATE Board";
+	compatible = "rockchip,rv1109-evb-ddr3-v12-facial-gate", "rockchip,rv1126";
+
+	chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";
+	};
+
+	pwmleds {
+		compatible = "pwm-leds";
+
+		pwmi_ir {
+			label = "ir";
+			pwms = <&pwm5 0 25000 0>;
+			max-brightness = <255>;
+		};
+
+		pwmi_light {
+			label = "light";
+			pwms = <&pwm4 0 25000 0>;
+			max-brightness = <255>;
+		};
+	};
+
+    gpio-leds {
+        compatible = "gpio-leds";
+
+        relay {
+            label = "relay";
+            gpios = <&gpio2 RK_PB0 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
+	vcc5v0_dev: vcc5v0-dev {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc5v0_dev";
+		gpio = <&gpio4 RK_PA1 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+	};
+
+	vcc4v0_lte: vcc4v0-lte {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc4v0_lte";
+		gpio = <&gpio3 RK_PD4 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <4000000>;
+		regulator-max-microvolt = <4000000>;
+	};
+};
+
+&pinctrl {
+    lcd_rst {
+        lcd_rst_gpio: lcd-rst-gpio {
+            rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+
+    dev_pwr {
+        dev_pwr_en: dev-pwr-en {
+            rockchip,pins = <4 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+};
+
+&pwm2 {
+	status = "okay";
+};
+
+&pwm5 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm5m0_pins_pull_down>;
+};
+
+&dsi {
+	status = "disabled";
+};
+
+&i2c1 {
+    imx334: imx334@1a {
+        compatible = "sony,imx334";
+        reg = <0x1a>;
+        clocks = <&cru CLK_MIPICSI_OUT>;
+        clock-names = "xvclk";
+        power-domains = <&power RV1126_PD_VI>;
+        pinctrl-names = "rockchip,camera_default";
+        pinctrl-0 = <&mipicsi_clk0>;
+        avdd-supply = <&vcc3v3_sys>;
+        dovdd-supply = <&vcc_1v8>;
+        dvdd-supply = <&vcc_dvdd>;
+        pwdn-gpios = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
+        pd-gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
+        rockchip,camera-module-index = <1>;
+        rockchip,camera-module-facing = "front";
+        rockchip,camera-module-name = "CMK-OT1522-FG3";
+        rockchip,camera-module-lens-name = "CS-P1150-IRC-8M-FAU";
+        port {
+			ucam_out0: endpoint {
+				remote-endpoint = <&mipi_in_ucam0>;
+                data-lanes = <1 2 3 4>;
+            };
+        };
+    };
+};
+
+&i2c3 {
+    status = "okay";
+    clock-frequency = <400000>;
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c3m2_xfer>;
+};
+
+&i2c5 {
+    status = "disable";
+};
+
+&pwm4 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm4m0_pins_pull_down>;
+};
+
+&rk809 {
+	regulators {
+		vcc_dvdd: LDO_REG6 {
+			regulator-min-microvolt = <1300000>;
+			regulator-max-microvolt = <1300000>;
+		};
+
+		vcc_avdd: LDO_REG7 {
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+		};
+	};
+};
+
+&uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&uart4m1_xfer>;
+};
