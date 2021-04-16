@@ -1,5 +1,5 @@
 # owlvtech-patch-rv1126
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1014/145934_db7bdda6_8044273.png "facialgate.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0416/104602_63527ce4_8044273.png "50EMMC-IPC-removebg.png")
 #### 介绍
 - 在RV1126_RV1109_SDK基础上适配owlvtech开发板所需的补丁或文件，涉及屏幕显示和摄像头等基础功能。  
 - 本仓库补丁会随着rockchip官方SDK更新而更新，如果你使用的SDK不是最新的请选择仓库中对应的TAG版本，否则可能出现不兼容的情况。  
