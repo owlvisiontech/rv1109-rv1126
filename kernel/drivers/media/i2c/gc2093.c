@@ -720,14 +720,13 @@ static int __gc2093_power_on(struct gc2093 *gc2093)
 		goto disable_clk;
 	}
 
-	if (!IS_ERR(gc2093->reset_gpio)) {
+	if (!IS_ERR(gc2093->reset_gpio))
 		gpiod_set_value_cansleep(gc2093->reset_gpio, 1);
-		usleep_range(100, 200);
-	}
+
+	usleep_range(1000, 2000);
 
 	if (!IS_ERR(gc2093->pwdn_gpio))
 		gpiod_set_value_cansleep(gc2093->pwdn_gpio, 0);
-
 	if (!IS_ERR(gc2093->reset_gpio))
 		gpiod_set_value_cansleep(gc2093->reset_gpio, 0);
 
@@ -735,6 +734,8 @@ static int __gc2093_power_on(struct gc2093 *gc2093)
 	/* 8192 cycles prior to first SCCB transaction */
 	delay_us = gc2093_cal_delay(8192);
 	usleep_range(delay_us, delay_us * 2);
+
+    return 0;
 
 disable_clk:
 	clk_disable_unprepare(gc2093->xvclk);
@@ -746,7 +747,7 @@ static void __gc2093_power_off(struct gc2093 *gc2093)
 	if (!IS_ERR(gc2093->reset_gpio))
 		gpiod_set_value_cansleep(gc2093->reset_gpio, 1);
 	if (!IS_ERR(gc2093->pwdn_gpio))
-		gpiod_set_value_cansleep(gc2093->pwdn_gpio, 0);
+		gpiod_set_value_cansleep(gc2093->pwdn_gpio, 1);
 
 	regulator_bulk_disable(GC2093_NUM_SUPPLIES, gc2093->supplies);
 	clk_disable_unprepare(gc2093->xvclk);
