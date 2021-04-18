@@ -458,8 +458,8 @@
         reset-gpios = <&gpio2 RK_PA0 GPIO_ACTIVE_LOW>;
 		rockchip,camera-module-index = <1>;
 		rockchip,camera-module-facing = "front";
-		rockchip,camera-module-name = "YT-RV1109-3-V1";
-		rockchip,camera-module-lens-name = "M43-4IR-2MP-F2";
+		rockchip,camera-module-name = "YT-RV1109-2-V1";
+		rockchip,camera-module-lens-name = "40IR-2MP-F20";
 		port {
 			ucam_out1: endpoint {
 				remote-endpoint = <&csi_dphy1_input>;
