@@ -1,0 +1,82 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ */
+
+/dts-v1/;
+#include "rv1126.dtsi"
+#include "rv1126-owl-discrete-dcdc.dtsi"
+#include <dt-bindings/input/input.h>
+
+/ {
+	adc-keys {
+		compatible = "adc-keys";
+		io-channels = <&saradc 0>;
+		io-channel-names = "buttons";
+		poll-interval = <100>;
+		keyup-threshold-microvolt = <1800000>;
+
+		esc-key {
+			label = "esc";
+			linux,code = <KEY_ESC>;
+			press-threshold-microvolt = <0>;
+		};
+	};
+
+	cam_ircut0: cam_ircut {
+		status = "okay";
+		compatible = "rockchip,ircut";
+		ircut-open-gpios = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
+		ircut-close-gpios  = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "front";
+	};
+
+	flash_ir: flash-ir {
+		status = "okay";
+		compatible = "led,rgb13h";
+		label = "pwm-flash-ir";
+		led-max-microamp = <20000>;
+		flash-max-microamp = <20000>;
+		flash-max-timeout-us = <1000000>;
+		pwms=<&pwm3 0 25000 0>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "front";
+	};
+
+	wireless_wlan: wireless-wlan {
+		compatible = "wlan-platdata";
+		rockchip,grf = <&grf>;
+		wifi_chip_type = "USB-WiFi";
+		WIFI,poweren_gpio = <&gpio0 RK_PC0 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+	};
+};
+
+&dsi {
+    status = "disabled";
+};
+
+&isp_reserved {
+	size = <0x20000000>;
+};
+
+&pwm3 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm3m0_pins_pull_down>;
+};
+
+&uart0 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&uart0_xfer &uart0_ctsn>;
+    dma-names = "tx", "rx";
+    status = "okay";
+};
+
+&uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    dma-names = "tx", "rx";
+    pinctrl-0 = <&uart4m1_xfer>;
+};
