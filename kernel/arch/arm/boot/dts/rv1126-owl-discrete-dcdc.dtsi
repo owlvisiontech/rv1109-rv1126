@@ -53,8 +53,8 @@
 		compatible = "pwm-regulator";
 		pwms = <&pwm1 0 5000 1>;
 		regulator-name = "vdd_npu";
-		regulator-min-microvolt = <720000>;
-		regulator-max-microvolt = <880000>;
+		regulator-min-microvolt = <650000>;
+		regulator-max-microvolt = <950000>;
 		regulator-init-microvolt = <825000>;
 		regulator-always-on;
 		regulator-boot-on;
@@ -123,7 +123,6 @@
 	vcc5v0_dev: vcc5v0-dev {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc5v0_dev";
-		gpio = <&gpio4 RK_PA1 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 		regulator-always-on;
 		regulator-boot-on;
@@ -131,24 +130,12 @@
 		regulator-max-microvolt = <5000000>;
 	};
 
-	vcc18_lcd_n: vcc18-lcd-n {
-		compatible = "regulator-fixed";
-		regulator-name = "vcc18_lcd_n";
-        gpio = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
-        vin-supply = <&vcc3v3_sys>;
-		enable-active-high;
-		regulator-always-on;
-		regulator-boot-on;
-		regulator-min-microvolt = <1800000>;
-        regulator-max-microvolt = <1800000>;
-	};
-
 	sdio_pwrseq: sdio-pwrseq {
 		compatible = "mmc-pwrseq-simple";
         clocks = <&hym8563>;
         clock-names = "ext_clock";
 		pinctrl-names = "default";
-		pinctrl-0 = <&wifi_enable_h>;
+		/* pinctrl-0 = <&wifi_enable_h>; */
 
 		/*
 		 * On the module itself this is one of these (depending
@@ -156,7 +143,7 @@
 		 * - SDIO_RESET_L_WL_REG_ON
 		 * - PDN (power down when low)
 		 */
-		reset-gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
+		/* reset-gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>; */
 	};
 
 	wireless-bluetooth {
@@ -165,8 +152,8 @@
 		pinctrl-names = "default", "rts_gpio";
 		pinctrl-0 = <&uart0_rtsn>;
 		pinctrl-1 = <&uart0_rtsn_gpio>;
-		BT,power_gpio    = <&gpio0 RK_PA7 GPIO_ACTIVE_HIGH>;
-		BT,wake_host_irq = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
+		/* BT,power_gpio    = <&gpio0 RK_PA7 GPIO_ACTIVE_HIGH>; */
+		/* BT,wake_host_irq = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>; */
 		status = "okay";
 	};
 
@@ -179,7 +166,7 @@
 		pinctrl-0 = <&wifi_wake_host>;
 		wifi_chip_type = "ap6255";
 		/* WIFI,poweren_gpio = <&gpio0 RK_PA6 GPIO_ACTIVE_HIGH>; */
-		WIFI,host_wake_irq = <&gpio0 RK_PB0 GPIO_ACTIVE_HIGH>;
+		WIFI,host_wake_irq = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
 
@@ -280,21 +267,9 @@
 };
 
 &pinctrl {
-    lcd_rst {
-        lcd_rst_gpio: lcd-rst-gpio {
-            rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
-        };
-    };
-
-    dev_pwr {
-        dev_pwr_en: dev-pwr-en {
-            rockchip,pins = <4 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>;
-        };
-    };
-
 	es8311 {
 		spk_ctl: spk-ctl {
-			rockchip,pins = <2 RK_PA5 0 &pcfg_pull_none>;
+			rockchip,pins = <3 RK_PD1 0 &pcfg_pull_none>;
 		};
 	};
 
@@ -315,7 +290,7 @@
 	wireless-wlan {
 		/omit-if-no-ref/
 		wifi_wake_host: wifi-wake-host {
-			rockchip,pins = <0 RK_PB0 0 &pcfg_pull_up>;
+			rockchip,pins = <1 RK_PD0 0 &pcfg_pull_up>;
 		};
 	};
 };
@@ -423,7 +398,7 @@
 		pinctrl-0 = <&i2s0m0_mclk &spk_ctl>;
 		assigned-clocks = <&cru MCLK_I2S0_TX_OUT2IO>;
 		assigned-clock-parents = <&cru MCLK_I2S0_TX>;
-		spk-ctl-gpios = <&gpio2 RK_PA5 GPIO_ACTIVE_HIGH>;
+		spk-ctl-gpios = <&gpio3 RK_PD1 GPIO_ACTIVE_HIGH>;
 		#sound-dai-cells = <0>;
 	};
 };
@@ -443,299 +418,7 @@
 };
 
 &dsi {
-	status = "okay";
-
-    rockchip,lane-rate = <480>;
-	panel@0 {
-		compatible = "simple-panel-dsi";
-		reg = <0>;
-		backlight = <&backlight>;
-		power-supply = <&vcc18_lcd_n>;
-		prepare-delay-ms = <5>;
-		reset-delay-ms = <1>;
-		init-delay-ms = <80>;
-		disable-delay-ms = <10>;
-		unprepare-delay-ms = <5>;
-
-        reset-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_LOW>;
-        pinctrl-names = "default";
-        pinctrl-0 = <&lcd_rst_gpio>;
-
-		width-mm = <107>;
-		height-mm = <172>;
-
-		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
-			      MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_EOT_PACKET)>;
-		dsi,format = <MIPI_DSI_FMT_RGB888>;
-		dsi,lanes = <4>;
-
-        panel-init-sequence = [
-            39 00 04 FF 98 81 03
-            15 00 02 01 00
-            15 00 02 02 00
-            15 00 02 03 53
-            15 00 02 04 53
-            15 00 02 05 13
-            15 00 02 06 04
-            15 00 02 07 02
-            15 00 02 08 02
-            15 00 02 09 00
-            15 00 02 0a 00
-            15 00 02 0b 00
-            15 00 02 0c 00
-            15 00 02 0d 00
-            15 00 02 0e 00
-            15 00 02 0f 00
-            15 00 02 10 00
-            15 00 02 11 00
-            15 00 02 12 00
-            15 00 02 13 00
-            15 00 02 14 00
-            15 00 02 15 00
-            15 00 02 16 00
-            15 00 02 17 00
-            15 00 02 18 00
-            15 00 02 19 00
-            15 00 02 1a 00
-            15 00 02 1b 00
-            15 00 02 1c 00
-            15 00 02 1d 00
-            15 00 02 1e c0
-            15 00 02 1f 80
-            15 00 02 20 02
-            15 00 02 21 09
-            15 00 02 22 00
-            15 00 02 23 00
-            15 00 02 24 00
-            15 00 02 25 00
-            15 00 02 26 00
-            15 00 02 27 00
-            15 00 02 28 55
-            15 00 02 29 03
-            15 00 02 2a 00
-            15 00 02 2b 00
-            15 00 02 2c 00
-            15 00 02 2d 00
-            15 00 02 2e 00
-            15 00 02 2f 00
-            15 00 02 30 00
-            15 00 02 31 00
-            15 00 02 32 00
-            15 00 02 33 00
-            15 00 02 34 00
-            15 00 02 35 00
-            15 00 02 36 00
-            15 00 02 37 00
-            15 00 02 38 3C
-            15 00 02 39 00
-            15 00 02 3a 00
-            15 00 02 3b 00
-            15 00 02 3c 00
-            15 00 02 3d 00
-            15 00 02 3e 00
-            15 00 02 3f 00
-            15 00 02 40 00
-            15 00 02 41 00
-            15 00 02 42 00
-            15 00 02 43 00
-            15 00 02 44 00
-
-            15 00 02 50 01
-            15 00 02 51 23
-            15 00 02 52 45
-            15 00 02 53 67
-            15 00 02 54 89
-            15 00 02 55 ab
-            15 00 02 56 01
-            15 00 02 57 23
-            15 00 02 58 45
-            15 00 02 59 67
-            15 00 02 5a 89
-            15 00 02 5b ab
-            15 00 02 5c cd
-            15 00 02 5d ef
-
-            15 00 02 5e 01
-            15 00 02 5f 08
-            15 00 02 60 02
-            15 00 02 61 02
-            15 00 02 62 0A
-            15 00 02 63 15
-            15 00 02 64 14
-            15 00 02 65 02
-            15 00 02 66 11
-            15 00 02 67 10
-            15 00 02 68 02
-            15 00 02 69 0F
-            15 00 02 6a 0E
-            15 00 02 6b 02
-            15 00 02 6c 0D
-            15 00 02 6d 0C
-            15 00 02 6e 06
-            15 00 02 6f 02
-            15 00 02 70 02
-            15 00 02 71 02
-            15 00 02 72 02
-            15 00 02 73 02
-            15 00 02 74 02
-
-            15 00 02 75 06
-            15 00 02 76 02
-            15 00 02 77 02
-            15 00 02 78 0A
-            15 00 02 79 15
-            15 00 02 7a 14
-            15 00 02 7b 02
-            15 00 02 7c 10
-            15 00 02 7d 11
-            15 00 02 7e 02
-            15 00 02 7f 0C
-            15 00 02 80 0D
-            15 00 02 81 02
-            15 00 02 82 0E
-            15 00 02 83 0F
-            15 00 02 84 08
-            15 00 02 85 02
-            15 00 02 86 02
-            15 00 02 87 02
-            15 00 02 88 02
-            15 00 02 89 02
-            15 00 02 8A 02
-
-            39 00 04 FF 98 81 04
-            15 00 02 22 0A
-            15 00 02 6C 15
-            15 00 02 6E 30
-            15 00 02 6F 37
-            15 00 02 8D 1F
-            15 00 02 87 BA
-            15 00 02 26 76
-            15 00 02 B2 D1
-            15 00 02 B5 07
-            15 00 02 35 17
-            15 00 02 33 14
-            15 00 02 31 75
-            15 00 02 3A 85
-            15 00 02 3B 98
-            15 00 02 38 01
-            15 00 02 39 00
-            15 00 02 7A 10
-            15 00 02 B5 07
-            15 00 02 31 75
-            15 00 02 3B C0
-            39 00 04 FF 98 81 01
-            15 00 02 22 0A
-            15 00 02 31 00
-            15 00 02 40 53
-            15 00 02 50 E9
-            15 00 02 51 E4
-
-            15 00 02 53 41
-            15 00 02 55 48
-
-            15 00 02 60 28
-            15 00 02 2E C8
-            15 00 02 34 01
-
-            15 00 02 A0 00
-            15 00 02 A1 17
-            15 00 02 A2 26
-            15 00 02 A3 15
-            15 00 02 A4 19
-            15 00 02 A5 2E
-            15 00 02 A6 22
-            15 00 02 A7 23
-            15 00 02 A8 89
-            15 00 02 A9 1B
-            15 00 02 AA 27
-            15 00 02 AB 70
-            15 00 02 AC 1C
-            15 00 02 AD 1D
-            15 00 02 AE 52
-            15 00 02 AF 27
-            15 00 02 B0 2B
-            15 00 02 B1 4F
-            15 00 02 B2 5B
-            15 00 02 B3 1C
-
-            15 00 02 C0 00
-            15 00 02 C1 17
-            15 00 02 C2 26
-            15 00 02 C3 15
-            15 00 02 C4 19
-            15 00 02 C5 2E
-            15 00 02 C6 22
-            15 00 02 C7 23
-            15 00 02 C8 89
-            15 00 02 C9 1B
-            15 00 02 CA 27
-            15 00 02 CB 70
-            15 00 02 CC 1C
-            15 00 02 CD 1D
-            15 00 02 CE 52
-            15 00 02 CF 27
-            15 00 02 D0 2B
-            15 00 02 D1 4F
-            15 00 02 D2 5B
-            15 00 02 D3 33
-
-            39 00 04 FF 98 81 02
-            15 00 02 04 17
-            15 00 02 05 12
-            15 00 02 06 40
-            15 00 02 07 0B
-
-            39 00 04 FF 98 81 00
-            15 00 02 35 00
-
-            05 C8 01 11
-            05 01 01 29
-            ];
-
-        display-timings {
-			native-mode = <&timing0>;
-
-			timing0: timing0 {
-				clock-frequency = <72000000>;
-				hactive = <800>;
-				vactive = <1280>;
-				hfront-porch = <46>;
-				hsync-len = <20>;
-				hback-porch = <46>;
-				vfront-porch = <20>;
-				vsync-len = <12>;
-				vback-porch = <14>;
-				hsync-active = <12>;
-				vsync-active = <2>;
-				de-active = <0>;
-				pixelclk-active = <0>;
-			};
-		};
-
-		ports {
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			port@0 {
-				reg = <0>;
-				panel_in_dsi: endpoint {
-					remote-endpoint = <&dsi_out_panel>;
-				};
-			};
-		};
-	};
-
-	ports {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		port@1 {
-			reg = <1>;
-			dsi_out_panel: endpoint {
-				remote-endpoint = <&panel_in_dsi>;
-			};
-		};
-	};
+	status = "disabled";
 };
 
 &csi_dphy0 {
@@ -1001,7 +684,7 @@
 &sfc {
 	/delete-property/ pinctrl-names;
 	/delete-property/ pinctrl-0;
-	status = "okay";
+	status = "disabled";
 };
 
 &u2phy0 {
