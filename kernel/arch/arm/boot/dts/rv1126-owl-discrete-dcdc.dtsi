@@ -44,7 +44,7 @@
 		regulator-init-microvolt = <825000>;
 		regulator-always-on;
 		regulator-boot-on;
-		regulator-s2ttling-time-up-us = <250>;
+        regulator-settling-time-up-us = <250>;
 		pwm-supply = <&vcc3v3_sys>;
 		status = "okay";
 	};
@@ -73,7 +73,7 @@
 		regulator-always-on;
 		regulator-boot-on;
 		regulator-settling-time-up-us = <250>;
-		pwm-supply = <&vcc5v0_sys>;
+		pwm-supply = <&vcc3v3_sys>;
 		status = "okay";
 	};
 
@@ -249,6 +249,7 @@
 };
 
 &cpu0 {
+	status = "okay";
 	cpu-supply = <&vdd_arm>;
 };
 
@@ -344,7 +345,6 @@
 		   rockchip,camera-module-name = "YT10092";
 		   rockchip,camera-module-lens-name = "IR0147-60IRC-8M-F20";
 		   ir-cut = <&cam_ircut0>;
-		   flash-leds = <&flash_ir>;
 		   port {
 				   ucam_out0: endpoint {
 						   remote-endpoint = <&mipi_in_ucam0>;
