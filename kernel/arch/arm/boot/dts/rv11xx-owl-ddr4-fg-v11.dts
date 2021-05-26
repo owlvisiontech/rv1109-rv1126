@@ -428,6 +428,9 @@
 };
 
 &i2c1 {
+    status = "okay";
+    clock-frequency = <400000>;
+
 	ov2718: ov2718@36 {
 		compatible = "ovti,ov2718";
 		reg = <0x36>;
