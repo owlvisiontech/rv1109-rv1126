@@ -1,0 +1,36 @@
+#!/bin/sh
+
+case "$1" in
+	start)
+        ls /sys/class/drm | grep "card0-"
+        if [ $? -ne 0 ] ;then
+            echo "not found display"
+            HasDisplay=0
+        else
+            echo "find display"
+            HasDisplay=1
+            cat /proc/device-tree/compatible | grep lt9611
+            if [ $? -ne 0 ] ;then
+                echo "not HDMI"
+            else
+                echo "find HDMI"
+                HasHDMI=1
+            fi
+        fi
+
+        if [ $HasDisplay -eq 1 ]; then
+            ispserver &
+            startup_app_ipc -d rkispp_scale2 -W 960 -H 540 -w 720 -h 1280 -I 0 &
+            printf "startup_app_ipc start\n"
+        fi
+        ;;
+	stop)
+        killall -9 startup_app_ipc
+		printf "stop finished\n"
+		;;
+    *)
+		echo "Usage: $0 {start|stop}"
+        exit 1
+        ;;
+esac
+exit 0
