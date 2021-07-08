@@ -48,7 +48,7 @@ export RK_USERDATA_FS_TYPE=ext2
 export RK_OEM_DIR=oem_facial_gate
 # OEM build on buildroot
 export RK_OEM_BUILDIN_BUILDROOT=NO
-#userdata config
+#userdata config, if not define this, system will format by RK_USERDATA_FS_TYPE
 export RK_USERDATA_DIR=userdata_normal
 #misc image
 export RK_MISC=wipe_all-misc.img
@@ -56,3 +56,5 @@ export RK_MISC=wipe_all-misc.img
 export RK_DISTRO_MODULE=
 # Define pre-build script for this board
 export RK_BOARD_PRE_BUILD_SCRIPT=app-build.sh
+# Define package-file for update.img
+export RK_PACKAGE_FILE=rv1126_rv1109-package-file
