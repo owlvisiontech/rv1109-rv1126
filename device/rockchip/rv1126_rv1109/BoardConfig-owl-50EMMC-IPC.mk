@@ -11,7 +11,7 @@ export RK_KERNEL_DEFCONFIG=rv1126_defconfig
 # Kernel defconfig fragment
 export RK_KERNEL_DEFCONFIG_FRAGMENT=
 # Kernel dts
-export RK_KERNEL_DTS=rv1126-owl-50ipc-v10-emmc-imx415
+export RK_KERNEL_DTS=rv1126-owl-50ipc-v10-emmc-v10
 # boot image type
 export RK_BOOT_IMG=zboot.img
 # kernel image path
@@ -21,7 +21,7 @@ export RK_KERNEL_FIT_ITS=boot.its
 # parameter for GPT table
 export RK_PARAMETER=parameter-buildroot-fit.txt
 # Buildroot config
-export RK_CFG_BUILDROOT=rockchip_rv1126_rv1109
+export RK_CFG_BUILDROOT=rockchip_rv1126_owl_50emmc_ipc
 # Recovery config
 export RK_CFG_RECOVERY=rockchip_rv1126_rv1109_recovery
 # Recovery image format type: fit(flattened image tree)

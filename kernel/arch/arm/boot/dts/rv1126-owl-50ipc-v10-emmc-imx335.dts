@@ -8,8 +8,8 @@
 #include "rv1126-owl-50ipc-v10-emmc.dtsi"
 
 / {
-	model = "Rockchip RV1109 38x38 V10 EMMC IMX307 DDR3 Board";
-	compatible = "rockchip,rv1109-38x38-v10-emmc-imx307", "rockchip,rv1126";
+	model = "Rockchip RV1126 OWLV-TECH 50EMMC IMX335 IPC Board";
+	compatible = "rockchip,rv1126-owl-50ipc-v10-emmc-imx335", "rockchip,rv1126";
 
 	chosen {
 		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";

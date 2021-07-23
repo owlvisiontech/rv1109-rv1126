@@ -1,0 +1,117 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ */
+
+/dts-v1/;
+
+#include "rv1126-owl-50ipc-v10-emmc.dtsi"
+
+/ {
+	model = "owlvisionTech 50ipc v10 emmc imx415";
+	compatible = "rockchip,rv1109-38-v10-spi-nand", "rockchip,rv1109";
+
+	chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";
+	};
+};
+
+&csi_dphy0 {
+	status = "okay";
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi_in_ucam0: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&ucam_out0>;
+				data-lanes = <1 2 3 4>;
+			};
+
+            mipi_in_ucam1: endpoint@2 {
+                reg = <2>;
+                remote-endpoint = <&ucam_out01>;
+                data-lanes = <1 2 3 4>;
+            };
+
+            mipi_in_ucam2: endpoint@3 {
+                reg = <3>;
+                remote-endpoint = <&ucam_out02>;
+                data-lanes = <1 2 3 4>;
+            };
+		};
+
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			csidphy0_out: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&mipi_csi2_input>;
+			};
+		};
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+    imx334: imx334@1a {
+        compatible = "sony,imx334";
+        reg = <0x1a>;
+        clocks = <&cru CLK_MIPICSI_OUT>;
+        clock-names = "xvclk";
+        power-domains = <&power RV1126_PD_VI>;
+        pinctrl-names = "rockchip,camera_default";
+        pinctrl-0 = <&mipicsi_clk0>;
+        avdd-supply = <&vcc3v3_sys>;
+        dovdd-supply = <&vcc_1v8>;
+        dvdd-supply = <&vcc_dvdd>;
+        pwdn-gpios = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
+        pd-gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
+        rockchip,camera-module-index = <1>;
+        rockchip,camera-module-facing = "front";
+        rockchip,camera-module-name = "CMK-OT1522-FG3";
+        rockchip,camera-module-lens-name = "CS-P1150-IRC-8M-FAU";
+        port {
+            ucam_out01: endpoint {
+               remote-endpoint = <&mipi_in_ucam1>;
+               data-lanes = <1 2 3 4>;
+           };
+        };
+    };
+
+	imx335: imx335@1a {
+		compatible = "sony,imx335";
+		reg = <0x1a>;
+		clocks = <&cru CLK_MIPICSI_OUT>;
+		clock-names = "xvclk";
+		power-domains = <&power RV1126_PD_VI>;
+		pinctrl-names = "rockchip,camera_default";
+        pinctrl-0 = <&mipicsi_clk0>;
+        avdd-supply = <&vcc3v3_sys>;
+        dovdd-supply = <&vcc_1v8>;
+        dvdd-supply = <&vcc_dvdd>;
+        reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "front";
+		rockchip,camera-module-name = "MTV4-IR-E-P";
+		rockchip,camera-module-lens-name = "40IRC-4MP-F16";
+        ir-cut = <&cam_ircut0>;
+        port {
+            ucam_out02: endpoint {
+                remote-endpoint = <&mipi_in_ucam2>;
+                data-lanes = <1 2 3 4>;
+            };
+        };
+    };
+};
+

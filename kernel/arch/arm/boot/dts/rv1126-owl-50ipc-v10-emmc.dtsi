@@ -26,31 +26,38 @@
 	cam_ircut0: cam_ircut {
 		status = "okay";
 		compatible = "rockchip,ircut";
-		ircut-open-gpios = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
-		ircut-close-gpios  = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
+		ircut-open-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
+		ircut-close-gpios  = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
 		rockchip,camera-module-index = <1>;
 		rockchip,camera-module-facing = "front";
 	};
 
-	flash_ir: flash-ir {
-		status = "okay";
-		compatible = "led,rgb13h";
-		label = "pwm-flash-ir";
-		led-max-microamp = <20000>;
-		flash-max-microamp = <20000>;
-		flash-max-timeout-us = <1000000>;
-		pwms=<&pwm3 0 25000 0>;
-		rockchip,camera-module-index = <1>;
-		rockchip,camera-module-facing = "front";
-	};
+    /delete-node/ vdd-vepu;
 
-	wireless_wlan: wireless-wlan {
-		compatible = "wlan-platdata";
-		rockchip,grf = <&grf>;
-		wifi_chip_type = "USB-WiFi";
-		WIFI,poweren_gpio = <&gpio0 RK_PC0 GPIO_ACTIVE_HIGH>;
-		status = "okay";
-	};
+    vdd_logic_npu_vepu_fixed: vdd-logic-npu-vepu-fixed {
+        compatible = "regulator-fixed";
+        regulator-name = "vdd_logic_npu_vepu-fixed";
+        regulator-always-on;
+        regulator-boot-on;
+        regulator-min-microvolt = <825000>;
+        regulator-max-microvolt = <825000>;
+    };
+};
+
+&npu {
+    status = "okay";
+    npu-supply = <&vdd_logic_npu_vepu_fixed>;
+};
+
+&rkvenc {
+    status = "okay";
+    venc-supply = <&vdd_logic_npu_vepu_fixed>;
+};
+
+&npu_opp_table {
+ /delete-node/ opp-700000000;
+ /delete-node/ opp-800000000;
+ /delete-node/ opp-934000000;
 };
 
 &dsi {
@@ -58,13 +65,7 @@
 };
 
 &isp_reserved {
-	size = <0x20000000>;
-};
-
-&pwm3 {
-	status = "okay";
-	pinctrl-names = "active";
-	pinctrl-0 = <&pwm3m0_pins_pull_down>;
+    size = <0x20000000>;
 };
 
 &uart0 {

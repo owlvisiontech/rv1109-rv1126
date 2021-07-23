@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ */
+
+/dts-v1/;
+
+#include "rv1126-owl-50ipc-v10-emmc.dtsi"
+
+/ {
+	model = "owlvisionTech 50ipc v10 emmc imx415";
+	compatible = "rockchip,rv1109-38-v10-spi-nand", "rockchip,rv1109";
+
+	chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";
+	};
+};
+

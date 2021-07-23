@@ -135,7 +135,7 @@
         clocks = <&hym8563>;
         clock-names = "ext_clock";
 		pinctrl-names = "default";
-		/* pinctrl-0 = <&wifi_enable_h>; */
+        pinctrl-0 = <&wifi_enable_h>;
 
 		/*
 		 * On the module itself this is one of these (depending
@@ -143,18 +143,7 @@
 		 * - SDIO_RESET_L_WL_REG_ON
 		 * - PDN (power down when low)
 		 */
-		/* reset-gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>; */
-	};
-
-	wireless-bluetooth {
-		compatible = "bluetooth-platdata";
-		uart_rts_gpios = <&gpio1 RK_PC0 GPIO_ACTIVE_LOW>;
-		pinctrl-names = "default", "rts_gpio";
-		pinctrl-0 = <&uart0_rtsn>;
-		pinctrl-1 = <&uart0_rtsn_gpio>;
-		/* BT,power_gpio    = <&gpio0 RK_PA7 GPIO_ACTIVE_HIGH>; */
-		/* BT,wake_host_irq = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>; */
-		status = "okay";
+        reset-gpios = <&gpio1 RK_PD1 GPIO_ACTIVE_LOW>;
 	};
 
 	wireless_wlan: wireless-wlan {
@@ -164,8 +153,8 @@
 		clock-names = "clk_wifi";
 		pinctrl-names = "default";
 		pinctrl-0 = <&wifi_wake_host>;
-		wifi_chip_type = "ap6255";
-		/* WIFI,poweren_gpio = <&gpio0 RK_PA6 GPIO_ACTIVE_HIGH>; */
+        wifi_chip_type = "rtl8189fs";
+        WIFI,poweren_gpio = <&gpio1 RK_PD1 GPIO_ACTIVE_HIGH>;
 		WIFI,host_wake_irq = <&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
@@ -284,7 +273,7 @@
 	sdio-pwrseq {
 		/omit-if-no-ref/
 		wifi_enable_h: wifi-enable-h {
-			rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
+			rockchip,pins = <1 RK_PD1 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 
@@ -664,6 +653,7 @@
 	sd-uhs-sdr25;
 	sd-uhs-sdr104;
 	vqmmc-supply = <&vcc3v3_sys>;
+    vmmc-supply = <&vcc_sd>;
 	status = "okay";
 };
 
