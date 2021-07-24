@@ -43,8 +43,14 @@ export enable_encoder_debug=0
 
 ipc-daemon --no-mediaserver &
 sleep 2
-ispserver -no-sync-db &
-sleep 1
+QUICKDISPLAY=`busybox ps |grep -w startup_app_ipc |grep -v grep`
+if [ -z "$QUICKDISPLAY" ] ;then
+  echo "run ispserver"
+  ispserver &
+  sleep 1
+else
+  echo "ispserver is running"
+fi
 
 ls /sys/class/drm | grep "card0-"
 if [ $? -ne 0 ] ;then
@@ -71,11 +77,26 @@ else
   HasAudio=1
 fi
 
+# TODO:
+HasAudio=0
+
 if [ $HasDisplay -eq 1 ]; then
 	if [ $HasHDMI -eq 1 ]; then
 		mediaserver -c /oem/usr/share/mediaserver/rv1109/ipc-hdmi-display.conf &
 	else
-		mediaserver -c /oem/usr/share/mediaserver/rv1109/ipc-display.conf &
+		if [ -z "$QUICKDISPLAY" ]; then
+			if [ $HasAudio -eq 1 ]; then
+				mediaserver -c /oem/usr/share/mediaserver/rv1109/ipc-display.conf &
+			else
+				mediaserver -c /oem/usr/share/mediaserver/rv1109/ipc-display-without-audio.conf &
+			fi
+		else
+			if [ $HasAudio -eq 1 ]; then
+				mediaserver -c /oem/usr/share/mediaserver/rv1109/ipc.conf &
+			else
+				mediaserver -c /oem/usr/share/mediaserver/rv1109/ipc-without-audio.conf &
+			fi
+		fi
 	fi
 else
 	if [ $HasAudio -eq 1 ]; then
