@@ -17,7 +17,7 @@ export RK_KERNEL_DEFCONFIG=rv1126_defconfig
 # Kernel defconfig fragment
 export RK_KERNEL_DEFCONFIG_FRAGMENT=
 # Kernel dts
-export RK_KERNEL_DTS=rv11xx-owl-38ipc-v10-imx307
+export RK_KERNEL_DTS=rv11xx-owl-38ipc-v10-imx415
 # boot image type
 export RK_BOOT_IMG=zboot.img
 # kernel image path
@@ -25,7 +25,7 @@ export RK_KERNEL_IMG=kernel/arch/arm/boot/zImage
 # parameter for GPT table
 export RK_PARAMETER=parameter-fit-nand-256M.txt
 # Buildroot config
-export RK_CFG_BUILDROOT=rockchip_rv11xx_owl_spi_nand
+export RK_CFG_BUILDROOT=rockchip_rv1126_rv1109_spi_nand
 # Recovery config
 export RK_CFG_RECOVERY=rockchip_rv1126_rv1109_spi_nand_recovery
 # Recovery image format type: fit(flattened image tree)
