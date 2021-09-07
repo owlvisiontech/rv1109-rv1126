@@ -1,0 +1,209 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2020 Rockchip Electronics Co., Ltd.
+ */
+
+/dts-v1/;
+#include "rv1126.dtsi"
+#include "rv1126-owl-discrete-dcdc.dtsi"
+#include <dt-bindings/input/input.h>
+
+/ {
+    model = "owlvisionTech JICUI IPC IMX415 V10";
+    compatible = "rockchip,rv1126-owl-jicui-ipc-v10", "rockchip,rv1126";
+
+	chosen {
+		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";
+	};
+
+	cam_ircut0: cam_ircut {
+		status = "okay";
+		compatible = "rockchip,ircut";
+		ircut-open-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_HIGH>;
+		ircut-close-gpios  = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "front";
+	};
+
+    /delete-node/ vdd-vepu;
+
+    vdd_logic_npu_vepu_fixed: vdd-logic-npu-vepu-fixed {
+        compatible = "regulator-fixed";
+        regulator-name = "vdd_logic_npu_vepu-fixed";
+        regulator-always-on;
+        regulator-boot-on;
+        regulator-min-microvolt = <825000>;
+        regulator-max-microvolt = <825000>;
+    };
+
+	vdd5v_dev: vdd5v-dev {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd5v_dev";
+		gpio = <&gpio3 RK_PC6 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+	};
+};
+
+&npu {
+    status = "okay";
+    npu-supply = <&vdd_logic_npu_vepu_fixed>;
+};
+
+&rkvenc {
+    status = "okay";
+    venc-supply = <&vdd_logic_npu_vepu_fixed>;
+};
+
+&npu_opp_table {
+ /delete-node/ opp-700000000;
+ /delete-node/ opp-800000000;
+ /delete-node/ opp-934000000;
+};
+
+&dsi {
+    status = "disabled";
+};
+
+&csi_dphy0 {
+	status = "okay";
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			mipi_in_ucam0: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&ucam_out0>;
+				data-lanes = <1 2 3 4>;
+			};
+
+            mipi_in_ucam1: endpoint@2 {
+                reg = <2>;
+                remote-endpoint = <&ucam_out01>;
+                data-lanes = <1 2 3 4>;
+            };
+
+            mipi_in_ucam2: endpoint@3 {
+                reg = <3>;
+                remote-endpoint = <&ucam_out02>;
+                data-lanes = <1 2 3 4>;
+            };
+		};
+
+		port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			csidphy0_out: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&mipi_csi2_input>;
+			};
+		};
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+    imx334: imx334@1a {
+        compatible = "sony,imx334";
+        reg = <0x1a>;
+        clocks = <&cru CLK_MIPICSI_OUT>;
+        clock-names = "xvclk";
+        power-domains = <&power RV1126_PD_VI>;
+        pinctrl-names = "rockchip,camera_default";
+        pinctrl-0 = <&mipicsi_clk0>;
+        avdd-supply = <&vcc3v3_sys>;
+        dovdd-supply = <&vcc_1v8>;
+        dvdd-supply = <&vcc_dvdd>;
+        pwdn-gpios = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
+        pd-gpios = <&gpio1 RK_PD4 GPIO_ACTIVE_HIGH>;
+        reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
+        rockchip,camera-module-index = <1>;
+        rockchip,camera-module-facing = "front";
+        rockchip,camera-module-name = "CMK-OT1522-FG3";
+        rockchip,camera-module-lens-name = "CS-P1150-IRC-8M-FAU";
+        port {
+            ucam_out01: endpoint {
+               remote-endpoint = <&mipi_in_ucam1>;
+               data-lanes = <1 2 3 4>;
+           };
+        };
+    };
+
+	imx335: imx335@1a {
+		compatible = "sony,imx335";
+		reg = <0x1a>;
+		clocks = <&cru CLK_MIPICSI_OUT>;
+		clock-names = "xvclk";
+		power-domains = <&power RV1126_PD_VI>;
+		pinctrl-names = "rockchip,camera_default";
+        pinctrl-0 = <&mipicsi_clk0>;
+        avdd-supply = <&vcc3v3_sys>;
+        dovdd-supply = <&vcc_1v8>;
+        dvdd-supply = <&vcc_dvdd>;
+        reset-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+		rockchip,camera-module-index = <1>;
+		rockchip,camera-module-facing = "front";
+		rockchip,camera-module-name = "MTV4-IR-E-P";
+		rockchip,camera-module-lens-name = "40IRC-4MP-F16";
+        ir-cut = <&cam_ircut0>;
+        port {
+            ucam_out02: endpoint {
+                remote-endpoint = <&mipi_in_ucam2>;
+                data-lanes = <1 2 3 4>;
+            };
+        };
+    };
+};
+
+
+&isp_reserved {
+    size = <0x20000000>;
+};
+
+&gmac {
+    snps,reset-gpio = <&gpio2 RK_PC0 GPIO_ACTIVE_LOW>;
+};
+
+&wireless_wlan {
+    wifi_chip_type = "ap6212";
+};
+
+&uart0 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&uart0_xfer &uart0_ctsn>;
+    dma-names = "tx", "rx";
+    status = "okay";
+};
+
+&uart4 {
+    status = "okay";
+    pinctrl-names = "default";
+    dma-names = "tx", "rx";
+    pinctrl-0 = <&uart4m1_xfer>;
+};
+
+&can {
+    status = "okay";
+
+    pinctrl-names = "default";
+    pinctrl-0 = <&canm0_pins>;
+};
+
+&pmu_io_domains {
+	status = "okay";
+
+	vccio3-supply = <&vcc_1v8>;
+};
+
