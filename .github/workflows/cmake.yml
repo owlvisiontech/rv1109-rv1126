@@ -65,7 +65,7 @@ jobs:
         
     - name: building
       run: |
-        cd /opt/linnux/RV1126_RV1109_SDK_2.2.1/
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.1/
         source envsetup.sh rockchip_rv1126_rv1109
         ./build.sh BoardConfig.mk
         ./build.sh 
@@ -74,5 +74,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: megacmd.deb
-        path: /opt/linnux/RV1126_RV1109_SDK_2.2.1/IMAGE
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.1/IMAGE
         
