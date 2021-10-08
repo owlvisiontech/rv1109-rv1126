@@ -51,7 +51,7 @@ jobs:
         
     - name: download-sdk
       run: |
-        #mega-get https://mega.nz/file/zrhTGSQS#uy70R1hInURv0gtbZBQaDHmyc_qllZvOmCbR9ieQgrM /opt/linux/
+        mega-get https://mega.nz/file/zrhTGSQS#uy70R1hInURv0gtbZBQaDHmyc_qllZvOmCbR9ieQgrM /opt/linux/
     
     - name: copyfiles
       run: |
