@@ -15,8 +15,13 @@ jobs:
 
     steps:
   
-    - uses: actions/checkout@v2
-
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: prepare
+      run: |
+        mkdir -p /opt/linux/
+      shell: bash
+      
     - name: Cache Primes
       id: cache-primes  
       uses: actions/cache@v2
@@ -24,10 +29,7 @@ jobs:
         path: /opt/linux/
         key: ${{ runner.os }}-primes
         
-    - name: prepare
-      run: |
-        sudo mkdir -p /opt/linux/
-      shell: bash
+
       
     - name: action-megacmd
       # You may pin to the exact commit or the version.
