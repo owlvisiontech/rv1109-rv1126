@@ -25,6 +25,7 @@ jobs:
         unzip megacmd_0.016_linux_amd64.zip
         find
         sudo cp megacmd /usr/sbin/
+        sudo chmod 777 /usr/sbin/megacmd
       shell: bash
       
     - name: Cache Primes
