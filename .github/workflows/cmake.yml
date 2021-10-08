@@ -36,7 +36,7 @@ jobs:
       # uses: Difegue/action-megacmd@043c6d2a167af3ae0904fc88c6b2829e4140dc8d
       uses: Difegue/action-megacmd@1.2.0
       with:
-        args: get https://mega.nz/file/W250FJBQ#c6vqQl0MfOSAosTRlCOiahgGqE8GOLQ5fyL6BzcXrbM /home/runner/linux/
+        args: get https://mega.nz/file/W250FJBQ#c6vqQl0MfOSAosTRlCOiahgGqE8GOLQ5fyL6BzcXrbM
     
     - name: decompress-sdk
       run: |
