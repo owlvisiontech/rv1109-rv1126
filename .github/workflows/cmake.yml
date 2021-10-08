@@ -38,9 +38,14 @@ jobs:
       with:
         args: get https://mega.nz/file/qyhWgALb#fkIdvxDJpRmQDiCDhqsB93k6GwHQwh6SStl_yAqmXo8 /opt/
     
+    - name: copyfiles
+      run: |
+        docker cp e1cc5189871f1159364baf9561c911ab076cea_3bf9da:/opt/rk356x_loader_test.zip /opt/linux/
+        ls /opt/linux/
+    
     - name: decompress-sdk
       run: |
-        find / -name "*rk356*.tar.gz*"
+        find / -name "*rk356**"
         cd /opt/linux/
         ls
         tar zxvf rk356x_sdk_v1.1.2_20210720.tar.gz
