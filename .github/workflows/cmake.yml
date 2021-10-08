@@ -27,7 +27,8 @@ jobs:
     - name: prepare
       run: |
         mkdir -p $HOME/linux/
-        echo $HOME/linux/
+        echo "test" > $HOME/linux/README.txt
+        ls $HOME/linux/
       shell: bash
       
     - name: action-megacmd
