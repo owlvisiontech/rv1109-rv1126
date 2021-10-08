@@ -17,7 +17,8 @@ jobs:
   
     - name: Checkout
       uses: actions/checkout@v2
-    - name: prepare
+      
+    - name: prepare-megacmd
       run: |
         mkdir -p /opt/linux/
         cd /opt/linux/
@@ -37,19 +38,16 @@ jobs:
         path: /opt/linux/
         key: ${{ runner.os }}-primes
         
-    - name: action-megacmd
+    - name: download-sdk
       run: |
         mega-get https://mega.nz/file/qyhWgALb#fkIdvxDJpRmQDiCDhqsB93k6GwHQwh6SStl_yAqmXo8 /opt/linux/
     
     - name: copyfiles
       run: |
-        docker images
-        docker ps
         ls /opt/linux/
     
     - name: decompress-sdk
       run: |
-        find / -name "*rk356**"
         cd /opt/linux/
         ls
         tar zxvf rk356x_sdk_v1.1.2_20210720.tar.gz
