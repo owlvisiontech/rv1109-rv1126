@@ -18,6 +18,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       
+    - name: Cache Primes
+      id: cache-primes  
+      uses: actions/cache@v2
+      with:
+        path: /opt/linux/
+        key: ${{ runner.os }}-primes
+
+    - name: download-megacmd
+      if: steps.cache-primes.outputs.cache-hit != 'true'
+      run: |
+        ls /opt/linux/
+        curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb
+    
     - name: prepare-megacmd
       run: |
         mkdir -p /opt/linux/
@@ -30,13 +43,6 @@ jobs:
         sudo apt-get clean
         
       shell: bash
-      
-    - name: Cache Primes
-      id: cache-primes  
-      uses: actions/cache@v2
-      with:
-        path: /opt/linux/
-        key: ${{ runner.os }}-primes
         
     - name: download-sdk
       run: |
