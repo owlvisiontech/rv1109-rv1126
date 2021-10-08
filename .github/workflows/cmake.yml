@@ -35,6 +35,10 @@ jobs:
         echo \"SkipSameSize\" : true, >> $HOME/.megacmd.json
         echo \"Verbose\" : 1 >> $HOME/.megacmd.json
         echo } > $HOME/.megacmd.json
+        
+        echo "###########################"
+        cat $HOME/.megacmd.json
+        echo "###########################"
       shell: bash
       
     - name: Cache Primes
