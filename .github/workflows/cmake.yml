@@ -25,6 +25,11 @@ jobs:
         path: /opt/linux/
         key: ${{ runner.os }}-primes
 
+    - name: sysprepare
+      run: |
+        mkdir -p /opt/linux/
+        cd /opt/linux/
+
     - name: download-megacmd
       if: steps.cache-primes.outputs.cache-hit != 'true'
       run: |
