@@ -34,7 +34,8 @@ jobs:
     - name: decompress-sdk
       run: |
         cd /opt/
-        tar zxvf *.tar.gz
+        ls
+        tar zxvf rk356x_sdk_v1.1.2_20210720.tar
         cd /opt/rk356*
         ./build.sh
         
