@@ -21,13 +21,13 @@ jobs:
       id: cache-primes  
       uses: actions/cache@v2
       with:
-        path: /opt/
+        path: $HOME
         key: ${{ runner.os }}-primes
         
     - name: prepare
       run: |
-        echo $HOME
         mkdir -p $HOME/linux/
+        echo $HOME/linux/
       shell: bash
       
     - name: action-megacmd
