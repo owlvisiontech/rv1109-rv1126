@@ -21,14 +21,12 @@ jobs:
       id: cache-primes  
       uses: actions/cache@v2
       with:
-        path: $HOME
+        path: /opt/linux/
         key: ${{ runner.os }}-primes
         
     - name: prepare
       run: |
-        mkdir -p $HOME/linux/
-        echo "test" > $HOME/linux/README.txt
-        ls $HOME/linux/
+        mkdir -p /opt/linux/
       shell: bash
       
     - name: action-megacmd
@@ -36,14 +34,15 @@ jobs:
       # uses: Difegue/action-megacmd@043c6d2a167af3ae0904fc88c6b2829e4140dc8d
       uses: Difegue/action-megacmd@1.2.0
       with:
-        args: get https://mega.nz/file/W250FJBQ#c6vqQl0MfOSAosTRlCOiahgGqE8GOLQ5fyL6BzcXrbM
+        args: get https://mega.nz/file/W250FJBQ#c6vqQl0MfOSAosTRlCOiahgGqE8GOLQ5fyL6BzcXrbM /opt/linux/
     
     - name: decompress-sdk
       run: |
-        cd $HOME/linux/
+        find / -name "*rk356*.tar.gz*"
+        cd /opt/linux/
         ls
         tar zxvf rk356x_sdk_v1.1.2_20210720.tar.gz
-        cd $HOME/linux/rk356x*
+        /opt/linux/rk356x*
         ./build.sh
         
         shell: bash
