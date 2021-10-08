@@ -21,17 +21,12 @@ jobs:
       run: |
         mkdir -p /opt/linux/
         cd /opt/linux/
-        wget https://github.com/t3rm1n4l/megacmd/releases/download/0.016/megacmd_0.016_linux_amd64.zip
-        unzip megacmd_0.016_linux_amd64.zip
-        find
-        sudo cp megacmd /usr/sbin/
-        sudo chmod 777 /usr/sbin/megacmd
 
-        apt-get update && apt-get install curl gnupg2 -y && \
+        sudo apt-get update && apt-get install curl gnupg2 -y && \
         curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb && \
-        apt install ./megacmd.deb -y && \
-        apt-get remove -y curl && \
-        apt-get clean
+        sudo apt install ./megacmd.deb -y && \
+        sudo apt-get remove -y curl && \
+        sudo apt-get clean
         
       shell: bash
       
