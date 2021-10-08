@@ -22,7 +22,7 @@ jobs:
         mkdir -p /opt/linux/
         cd /opt/linux/
 
-        sudo apt-get update && apt-get install curl gnupg2 -y && \
+        sudo apt-get update && sudo apt-get install curl gnupg2 -y && \
         curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb && \
         sudo apt install ./megacmd.deb -y && \
         sudo apt-get remove -y curl && \
