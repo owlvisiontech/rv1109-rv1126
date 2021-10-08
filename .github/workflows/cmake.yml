@@ -28,8 +28,8 @@ jobs:
         sudo chmod 777 /usr/sbin/megacmd
         
         echo { >> $HOME/.megacmd.json
-        #echo \"User\" : \"coderwuqiang@gmail.com\", >> $HOME/.megacmd.json
-        #echo \"Password\" : \"91459775\", >> $HOME/.megacmd.json
+        echo \"User\" : \"coderwuqiang@gmail.com\", >> $HOME/.megacmd.json
+        echo \"Password\" : \"91459775\", >> $HOME/.megacmd.json
         echo \"DownloadWorkers\" : 4, >> $HOME/.megacmd.json
         echo \"UploadWorkers\" : 4, >> $HOME/.megacmd.json
         echo \"SkipSameSize\" : true, >> $HOME/.megacmd.json
