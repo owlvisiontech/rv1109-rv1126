@@ -24,7 +24,7 @@ jobs:
         wget https://github.com/t3rm1n4l/megacmd/releases/download/0.016/megacmd_0.016_linux_amd64.zip
         unzip megacmd_0.016_linux_amd64.zip
         find
-        sudo cp megacmd_0.016_linux_amd64/megacmd /usr/sbin/
+        sudo cp megacmd /usr/sbin/
       shell: bash
       
     - name: Cache Primes
