@@ -35,7 +35,7 @@ jobs:
       run: |
         cd /opt/
         ls
-        tar zxvf rk356x_sdk_v1.1.2_20210720.tar
+        tar zxvf rk356x_sdk_v1.1.2_20210720.tar.gz
         cd /opt/rk356*
         ./build.sh
         
