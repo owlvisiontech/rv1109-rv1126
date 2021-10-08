@@ -40,7 +40,7 @@ jobs:
       run: |
         docker images
         docker ps
-        docker cp /opt/rk356x_loader_test.zip /opt/linux/
+        docker cp e1cc51:/opt/rk356x_loader_test.zip /opt/linux/
         ls /opt/linux/
     
     - name: decompress-sdk
