@@ -39,6 +39,15 @@ jobs:
         echo "###########################"
         cat $HOME/.megacmd.json
         echo "###########################"
+        
+        git clone https://github.com/meganz/MEGAcmd.git
+        cd MEGAcmd && git submodule update --init --recursive
+        sh autogen.sh
+        ./configure
+        make
+        sudo make install
+
+        
       shell: bash
       
     - name: Cache Primes
@@ -50,7 +59,7 @@ jobs:
         
     - name: action-megacmd
       run: |
-        megacmd get https://mega.nz/file/qyhWgALb#fkIdvxDJpRmQDiCDhqsB93k6GwHQwh6SStl_yAqmXo8 /opt/linux/
+        mega-get https://mega.nz/file/qyhWgALb#fkIdvxDJpRmQDiCDhqsB93k6GwHQwh6SStl_yAqmXo8 /opt/linux/
     
     - name: copyfiles
       run: |
