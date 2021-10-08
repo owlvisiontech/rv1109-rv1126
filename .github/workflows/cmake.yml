@@ -21,15 +21,8 @@ jobs:
       id: cache-primes  
       uses: actions/cache@v2
       with:
-        path: prime-numbers
+        path: /opt/
         key: ${{ runner.os }}-primes
-
-    - name: Generate Prime Numbers
-      if: steps.cache-primes.outputs.cache-hit != 'true'
-      run: /generate-primes.sh -d prime-numbers
-
-    - name: Use Prime Numbers
-      run: /primes.sh -d prime-numbers
     
     - name: action-megacmd
       # You may pin to the exact commit or the version.
@@ -37,4 +30,14 @@ jobs:
       uses: Difegue/action-megacmd@1.2.0
       with:
         args: get https://mega.nz/file/W250FJBQ#c6vqQl0MfOSAosTRlCOiahgGqE8GOLQ5fyL6BzcXrbM /opt/
-
+    
+    - name: decompress-sdk
+      run: |
+        cd /opt/
+        tar zxvf *.tar.gz
+        cd /opt/rk356*
+        ./build.sh
+        
+        shell: bash
+        
+        
