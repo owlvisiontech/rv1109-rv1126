@@ -66,6 +66,7 @@ jobs:
     - name: building
       run: |
         cd /opt/linux/RV1126_RV1109_SDK_2.2.1/
+        ./build.sh BoardConfig.mk
         source envsetup.sh rockchip_rv1126_rv1109
         ./build.sh BoardConfig.mk
         ./build.sh 
