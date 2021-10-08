@@ -29,8 +29,6 @@ jobs:
         path: /opt/linux/
         key: ${{ runner.os }}-primes
         
-
-      
     - name: action-megacmd
       # You may pin to the exact commit or the version.
       # uses: Difegue/action-megacmd@043c6d2a167af3ae0904fc88c6b2829e4140dc8d
@@ -40,7 +38,9 @@ jobs:
     
     - name: copyfiles
       run: |
-        docker cp e1cc5189871f1159364baf9561c911ab076cea_3bf9da:/opt/rk356x_loader_test.zip /opt/linux/
+        docker images
+        docker ps
+        docker cp /opt/rk356x_loader_test.zip /opt/linux/
         ls /opt/linux/
     
     - name: decompress-sdk
