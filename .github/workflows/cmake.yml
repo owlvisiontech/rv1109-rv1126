@@ -50,7 +50,6 @@ jobs:
       shell: bash
         
     - name: download-sdk
-      if: steps.cache-primes.outputs.cache-hit != 'true'
       run: |
         mega-get https://mega.nz/file/zrhTGSQS#uy70R1hInURv0gtbZBQaDHmyc_qllZvOmCbR9ieQgrM /opt/linux/
     
@@ -62,10 +61,18 @@ jobs:
       run: |
         cd /opt/linux/
         ls
+        tar zxf RV1126_RV1109_SDK_2.2.1.tar.gz
+        
+    - name: building
+      run: |
+        cd /opt/linnux/RV1126_RV1109_SDK_2.2.1/
+        source envsetup.sh rockchip_rv1126_rv1109
+        ./build.sh BoardConfig.mk
+        ./build.sh 
 
     - name: backup
       uses: actions/upload-artifact@v2
       with:
         name: megacmd.deb
-        path: /opt/linux/megacmd.deb
+        path: /opt/linnux/RV1126_RV1109_SDK_2.2.1/IMAGE
         
