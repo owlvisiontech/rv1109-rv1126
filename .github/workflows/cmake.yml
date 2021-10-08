@@ -51,7 +51,7 @@ jobs:
         
     - name: download-sdk
       run: |
-        mega-get https://mega.nz/file/qyhWgALb#fkIdvxDJpRmQDiCDhqsB93k6GwHQwh6SStl_yAqmXo8 /opt/linux/
+        mega-get https://mega.nz/file/zrhTGSQS#uy70R1hInURv0gtbZBQaDHmyc_qllZvOmCbR9ieQgrM /opt/linux/
     
     - name: copyfiles
       run: |
@@ -61,9 +61,6 @@ jobs:
       run: |
         cd /opt/linux/
         ls
-        tar zxvf rk356x_sdk_v1.1.2_20210720.tar.gz
-        /opt/linux/rk356x*
-        ./build.sh
         
         shell: bash
         
