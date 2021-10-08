@@ -34,7 +34,7 @@ jobs:
         echo \"UploadWorkers\" : 4, >> $HOME/.megacmd.json
         echo \"SkipSameSize\" : true, >> $HOME/.megacmd.json
         echo \"Verbose\" : 1 >> $HOME/.megacmd.json
-        echo } > $HOME/.megacmd.json
+        echo } >> $HOME/.megacmd.json
         
         echo "###########################"
         cat $HOME/.megacmd.json
