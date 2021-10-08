@@ -26,6 +26,15 @@ jobs:
         find
         sudo cp megacmd /usr/sbin/
         sudo chmod 777 /usr/sbin/megacmd
+        
+        echo { >> $HOME/.megacmd.json
+        echo \"User\" : \"MEGA_USERNAME\", >> $HOME/.megacmd.json
+        echo \"Password\" : \"MEGA_PASSWORD\", >> $HOME/.megacmd.json
+        echo \"DownloadWorkers\" : 4, >> $HOME/.megacmd.json
+        echo \"UploadWorkers\" : 4, >> $HOME/.megacmd.json
+        echo \"SkipSameSize\" : true, >> $HOME/.megacmd.json
+        echo \"Verbose\" : 1 >> $HOME/.megacmd.json
+        echo } > $HOME/.megacmd.json
       shell: bash
       
     - name: Cache Primes
