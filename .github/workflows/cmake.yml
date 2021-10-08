@@ -72,9 +72,14 @@ jobs:
     - name: building
       run: |
         cd /opt/linux/RV1126_RV1109_SDK_2.2.1/
-        ./build.sh BoardConfig.mk
-        source envsetup.sh rockchip_rv1126_rv1109
-        ./build.sh BoardConfig.mk
+        ./build.sh lunch
+        expect "Which would you like?"
+        exp_send "BoardConfig.mk\r"
+        interact
+        source envsetup.sh
+        expect "Which would you like?"
+        exp_send "rockchip_rv1126_rv1109\r"
+        interact
         ./build.sh 
 
     - name: backup
