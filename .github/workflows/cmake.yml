@@ -87,25 +87,9 @@ jobs:
         
     - name: building
       run: |
-        pwd
-        ls
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         ls
-
-        #!/bin/bash
-        /usr/bin/expect <<-EOF
-        set timeout 30
-        spawn ./build.sh lunch
-        expect "Which would you like?"
-        exp_send "0\r"
-        interact
-        spawn ./envsetup.sh
-        expect "Which would you like?"
-        exp_send "89\r"
-        interact
-        expect eof
-        EOF
-
+        cp device/rockchip/rv1126_rv1109/BoardConfig.mk device/rockchip/.BoardConfig.mk
         echo "config finished!"
         ./build.sh
  
