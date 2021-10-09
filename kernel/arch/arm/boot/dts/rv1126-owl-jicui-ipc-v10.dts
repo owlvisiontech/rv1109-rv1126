@@ -16,6 +16,11 @@
 		bootargs = "earlycon=uart8250,mmio32,0xff570000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7";
 	};
 
+    /delete-node/ vdd-vepu;
+    /delete-node/ i2s0_sound;
+    /delete-node/ i2s0_8ch;
+    /delete-node/ i2c4;
+
 	cam_ircut0: cam_ircut {
 		status = "okay";
 		compatible = "rockchip,ircut";
@@ -24,8 +29,6 @@
 		rockchip,camera-module-index = <1>;
 		rockchip,camera-module-facing = "front";
 	};
-
-    /delete-node/ vdd-vepu;
 
     vdd_logic_npu_vepu_fixed: vdd-logic-npu-vepu-fixed {
         compatible = "regulator-fixed";
@@ -45,6 +48,39 @@
 		regulator-boot-on;
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
+	};
+
+	vdd_lte: vdd-lte {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_lte";
+		gpio = <&gpio3 RK_PD7 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <4000000>;
+		regulator-max-microvolt = <4000000>;
+	};
+
+	vdd_ephy: vdd-ephy {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_ephy";
+		gpio = <&gpio2 RK_PB2 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+	};
+
+	ephy_rstn: ephy-rstn {
+		compatible = "regulator-fixed";
+		regulator-name = "ephy_rst";
+		gpio = <&gpio2 RK_PA2 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
 	};
 };
 
@@ -167,6 +203,9 @@
     };
 };
 
+&ov4689 {
+    /delete-property/ pinctrl-0;
+};
 
 &isp_reserved {
     size = <0x20000000>;
@@ -178,13 +217,11 @@
 
 &wireless_wlan {
     wifi_chip_type = "ap6212";
+    /delete-property/ WIFI,poweren_gpio;
 };
 
 &uart0 {
-    pinctrl-names = "default";
-    pinctrl-0 = <&uart0_xfer &uart0_ctsn>;
-    dma-names = "tx", "rx";
-    status = "okay";
+    status = "disabled";
 };
 
 &uart4 {
