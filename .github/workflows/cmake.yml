@@ -61,15 +61,17 @@ jobs:
     
     - name: decompress-sdk
       run: |
-        cd /opt/sdk/
+        mkdir -p /opt/linux/
+        cd /opt/linux/
+        tar Jxvf /opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz
         ls
-        #tar Jxf RV1126_RV1109_SDK_2.2.2.tar.xz
         
     - name: building
       run: |
         pwd
         ls
-        #cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        ls
         #./build.sh lunch
         #expect "Which would you like?"
         #exp_send "BoardConfig.mk\r"
