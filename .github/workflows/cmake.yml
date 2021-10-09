@@ -37,13 +37,11 @@ jobs:
         cd /opt/sdk/
         curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb
     
-    - name: Download SDK Artifact
-      if: steps.cache-primes.outputs.cache-hit != 'true'
-      uses: actions/download-artifact@v2.0.10
+    - name: Download workflow artifact
+      uses: dawidd6/action-download-artifact@v2.15.0
       with:
-        # Artifact name
+        workflow: cmake.yml
         name: RV1126_RV1109_SDK_2.2.2.tar.xz
-        # Destination path
         path: /opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz
     
     - name: prepare-megacmd
