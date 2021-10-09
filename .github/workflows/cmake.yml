@@ -67,7 +67,9 @@ jobs:
         
     - name: building
       run: |
-        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        pwd
+        ls
+        #cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         #./build.sh lunch
         #expect "Which would you like?"
         #exp_send "BoardConfig.mk\r"
