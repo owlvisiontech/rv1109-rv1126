@@ -1,0 +1,119 @@
+name: RV1109-RV1126 Firmware Building
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  watch:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Cache Primes
+      id: cache-primes
+      uses: actions/cache@v2
+      with:
+        path: /opt/sdk/
+        key: ${{ runner.os }}-primes
+
+    - name: Cache Buildroot
+      id: cache-buildroot
+      uses: actions/cache@v2
+      with:
+        path: $HOME/.buildroot-ccache
+        key: ${{ runner.os }}-buildroot
+
+    - name: sysprepare
+      run: |
+        mkdir -p /opt/sdk/
+        cd /opt/sdk/
+        ls
+
+    - name: download-megacmd
+      if: steps.cache-primes.outputs.cache-hit != 'true'
+      run: |
+        cd /opt/sdk/
+        curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb
+
+    - name: prepare-tools
+      run: |
+        mkdir -p /opt/sdk/
+        cd /opt/sdk/
+
+        sudo apt-get update
+        sudo apt-get install curl gnupg2 \
+        openssh-server \
+        android-tools-adb \
+        vim net-tools git \
+        cmake \
+        tree \
+        minicom \
+        gawk pv \
+        bison \
+        flex \
+        libssl-dev \
+        device-tree-compiler \
+        gcc-aarch64-linux-gnu mtools parted libudev-dev \
+        libusb-1.0-0-dev autoconf autotools-dev libsigsegv2 m4 intltool libdrm-dev curl sed \
+        make binutils build-essential gcc g++ bash patch gzip gawk bzip2 \
+        perl tar cpio python unzip rsync file bc wget libncurses5 u-boot-tools \
+        cvs mercurial rsync openssh-client subversion expect \
+        fakeroot liblz4-tool libtool keychain libncurses-dev -y
+
+        curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb && \
+        sudo apt install ./megacmd.deb -y && \
+        sudo apt-get remove -y curl && \
+        sudo apt-get clean
+
+    - name: download-sdk
+      run: |
+        if [ ! -f "/opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz" ]; then
+          echo "can't find SDK download now!"
+          mega-get https://mega.nz/file/b2hkCQSI#gwlIQJSuTsMR_hSwor7BjwXOPq603_HdeBl6M_MHeIo /opt/sdk/
+        fi
+
+    - name: copyfiles
+      run: |
+        ls /opt/sdk/
+
+    - name: decompress-sdk
+      run: |
+        mkdir -p /opt/linux/
+        cd /opt/linux/
+        pv /opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz | tar -Jx
+        ls
+
+    - name: apply patch
+      run: |
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/kernel && git init
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        git clone --depth=1 https://github.com/owlvisiontech/rv1109-rv1126.git
+        cd rv1109-rv1126
+        ./vendor-patch.sh -y
+
+    - name: building
+      run: |
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        ls
+        ln -rfs device/rockchip/rv1126_rv1109/BoardConfig.mk device/rockchip/.BoardConfig.mk
+        # delete repo stuf
+        sed -i '/repo\/repo\/repo/d' device/rockchip/common/build.sh
+        sed -i '/gen_patches_body.sh/d' device/rockchip/common/build.sh
+        echo "config finished!"
+        ./build.sh
+
+    - name: upload firmware
+      uses: actions/upload-artifact@v2
+      with:
+        name: Firmware
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.2/IMAGE
