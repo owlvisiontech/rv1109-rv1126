@@ -95,6 +95,8 @@ jobs:
     - name: apply patch
       run: |
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/kernel && git init
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         git clone --depth=1 https://github.com/owlvisiontech/rv1109-rv1126.git
         cd rv1109-rv1126
         ./vendor-patch.sh -y
