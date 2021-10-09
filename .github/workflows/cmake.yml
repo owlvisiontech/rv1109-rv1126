@@ -91,13 +91,13 @@ jobs:
         ls
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         ls
-        #./build.sh lunch
+        ./build.sh lunch BoardConfig.mk
         #expect "Which would you like?"
         #exp_send "BoardConfig.mk\r"
         #interact
-        #source envsetup.sh
+        source envsetup.sh rockchip_rv1126_rv1109
         #expect "Which would you like?"
         #exp_send "rockchip_rv1126_rv1109\r"
         #interact
-        #./build.sh 
+        ./build.sh 
         
