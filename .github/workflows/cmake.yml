@@ -11,7 +11,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
   
@@ -56,12 +56,6 @@ jobs:
     - name: copyfiles
       run: |
         ls /opt/linux/
-    
-    - name: upload
-      uses: actions/upload-artifact@v2
-      with:
-        name: RV1126_RV1109_SDK_2.2.1.tar.gz
-        path: /opt/linux/RV1126_RV1109_SDK_2.2.1.tar.gz
     
     - name: decompress-sdk
       run: |
