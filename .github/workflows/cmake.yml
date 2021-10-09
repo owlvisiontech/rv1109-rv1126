@@ -98,8 +98,8 @@ jobs:
         ls
         ln -rfs device/rockchip/rv1126_rv1109/BoardConfig.mk device/rockchip/.BoardConfig.mk
         # delete repo stuf
-        sed -i '/repo\/repo\/repo/d' ./build.sh && \
-        sed -i '/gen_patches_body.sh/d' ./build.sh
+        sed -i '/repo\/repo\/repo/d' device/rockchip/common/build.sh
+        sed -i '/gen_patches_body.sh/d' device/rockchip/common/build.sh
         echo "config finished!"
         ./build.sh
 
