@@ -95,6 +95,8 @@ jobs:
     - name: apply patch
       run: |
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
+        git config --global user.email "test@test.com"
+        git config --global user.name "test"
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/kernel && git init && git add ./* && git commit -m "debug"
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         git clone --depth=1 https://github.com/owlvisiontech/rv1109-rv1126.git
