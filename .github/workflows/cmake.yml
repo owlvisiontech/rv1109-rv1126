@@ -63,7 +63,7 @@ jobs:
       run: |
         mkdir -p /opt/linux/
         cd /opt/linux/
-        tar Jxvf /opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz
+        pv /opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz | tar Jxvf
         ls
         
     - name: building
