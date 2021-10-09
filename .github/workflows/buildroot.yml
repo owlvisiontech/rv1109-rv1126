@@ -1,12 +1,9 @@
 name:  Daily Firmware Building
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  watch:
-    branches: [ main ]
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 21,16 * * *'
 
 jobs:
   build:
