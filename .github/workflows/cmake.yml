@@ -60,14 +60,14 @@ jobs:
     - name: upload
       uses: actions/upload-artifact@v2
       with:
-        name: RV1126_RV1109_SDK_2.2.2.tar.zx
-        path: /opt/linux/RV1126_RV1109_SDK_2.2.2.tar.zx
+        name: RV1126_RV1109_SDK_2.2.2.tar.xz
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.2.tar.xz
     
     - name: decompress-sdk
       run: |
         cd /opt/linux/
         ls
-        tar Jxf RV1126_RV1109_SDK_2.2.2.tar.zx
+        tar Jxf RV1126_RV1109_SDK_2.2.2.tar.xz
         
     - name: building
       run: |
