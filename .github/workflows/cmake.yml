@@ -93,4 +93,8 @@ jobs:
         echo "config finished!"
         ./build.sh
  
-        
+    - name: backup
+      uses: actions/upload-artifact@v2
+      with:
+        name: megacmd.deb
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.2/IMAGE
