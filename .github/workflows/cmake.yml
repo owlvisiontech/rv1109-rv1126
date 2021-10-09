@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-  
+
     - name: Checkout
       uses: actions/checkout@v2
-      
+
     - name: Cache Primes
-      id: cache-primes  
+      id: cache-primes
       uses: actions/cache@v2
       with:
         path: /opt/sdk/
@@ -43,7 +43,7 @@ jobs:
       run: |
         cd /opt/sdk/
         curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb
-    
+
     - name: prepare-tools
       run: |
         mkdir -p /opt/sdk/
@@ -68,42 +68,42 @@ jobs:
         perl tar cpio python unzip rsync file bc wget libncurses5 u-boot-tools \
         cvs mercurial rsync openssh-client subversion expect \
         fakeroot liblz4-tool libtool keychain libncurses-dev -y
-        
+
         curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb && \
         sudo apt install ./megacmd.deb -y && \
         sudo apt-get remove -y curl && \
         sudo apt-get clean
-        
+
     - name: download-sdk
       run: |
         if [ ! -f "/opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz" ]; then
           echo "can't find SDK download now!"
           mega-get https://mega.nz/file/b2hkCQSI#gwlIQJSuTsMR_hSwor7BjwXOPq603_HdeBl6M_MHeIo /opt/sdk/
         fi
-    
+
     - name: copyfiles
       run: |
         ls /opt/sdk/
-    
+
     - name: decompress-sdk
       run: |
         mkdir -p /opt/linux/
         cd /opt/linux/
         pv /opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz | tar -Jx
         ls
-        
+
     - name: building
       run: |
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         ls
         # delete repo stuf
-        sed -i '/repo\/repo\/repo/d' ./build.sh
+        #sed -i '/repo\/repo\/repo/d' ./build.sh
         #sed -i '/gen_patches_body.sh/d' ./build.sh
         cat ./build.sh
         ln -rfs device/rockchip/rv1126_rv1109/BoardConfig.mk device/rockchip/.BoardConfig.mk
         echo "config finished!"
         ./build.sh
- 
+
     - name: backup
       uses: actions/upload-artifact@v2
       with:
