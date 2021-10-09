@@ -61,7 +61,7 @@ jobs:
     
     - name: decompress-sdk
       run: |
-        cd /opt/linux/
+        cd /opt/sdk/
         ls
         #tar Jxf RV1126_RV1109_SDK_2.2.2.tar.xz
         
