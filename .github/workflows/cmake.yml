@@ -51,7 +51,7 @@ jobs:
         
     - name: download-sdk
       run: |
-        mega-get https://mega.nz/file/W250FJBQ#c6vqQl0MfOSAosTRlCOiahgGqE8GOLQ5fyL6BzcXrbM /opt/linux/
+        mega-get https://mega.nz/file/b2hkCQSI#gwlIQJSuTsMR_hSwor7BjwXOPq603_HdeBl6M_MHeIo /opt/linux/
     
     - name: copyfiles
       run: |
@@ -60,18 +60,18 @@ jobs:
     - name: upload
       uses: actions/upload-artifact@v2
       with:
-        name: rk356x_sdk_v1.1.2_20210720.tar.gz
-        path: /opt/linux/rk356x_sdk_v1.1.2_20210720.tar.gz
+        name: RV1126_RV1109_SDK_2.2.2.tar.zx
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.2.tar.zx
     
     - name: decompress-sdk
       run: |
         cd /opt/linux/
         ls
-        tar zxf RV1126_RV1109_SDK_2.2.1.tar.gz
+        tar Jxf RV1126_RV1109_SDK_2.2.2.tar.zx
         
     - name: building
       run: |
-        cd /opt/linux/RV1126_RV1109_SDK_2.2.1/
+        cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         ./build.sh lunch
         expect "Which would you like?"
         exp_send "BoardConfig.mk\r"
@@ -86,5 +86,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: megacmd.deb
-        path: /opt/linux/RV1126_RV1109_SDK_2.2.1/IMAGE
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.2/IMAGE
         
