@@ -63,6 +63,11 @@ function hot_fix()
 
 function confirm_change()
 {
+    if [ "$1" = "-y" ]; then
+        apply_change
+        exit 0
+    fi
+
     read -r -p "Are You Sure do that? [Y/n] " input
 
     case $input in
@@ -93,6 +98,6 @@ show_notice
 check_dir "$SDK_TOP_DIR/kernel"
 check_dir "$SDK_TOP_DIR/u-boot"
 check_dir "$SDK_TOP_DIR/device"
-confirm_change
+confirm_change $1
 reconfig_after_apply_patch
 
