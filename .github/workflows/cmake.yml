@@ -89,6 +89,10 @@ jobs:
       run: |
         cd /opt/linux/RV1126_RV1109_SDK_2.2.2/
         ls
+        # delete repo stuf
+        sed -i '/repo\/repo\/repo/d' build.sh
+        sed -i '/gen_patches_body.sh/d' build.sh
+        
         ln -rfs device/rockchip/rv1126_rv1109/BoardConfig.mk device/rockchip/.BoardConfig.mk
         echo "config finished!"
         ./build.sh
