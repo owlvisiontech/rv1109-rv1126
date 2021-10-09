@@ -51,11 +51,17 @@ jobs:
         
     - name: download-sdk
       run: |
-        mega-get https://mega.nz/file/zrhTGSQS#uy70R1hInURv0gtbZBQaDHmyc_qllZvOmCbR9ieQgrM /opt/linux/
+        mega-get https://mega.nz/file/W250FJBQ#c6vqQl0MfOSAosTRlCOiahgGqE8GOLQ5fyL6BzcXrbM /opt/linux/
     
     - name: copyfiles
       run: |
         ls /opt/linux/
+    
+    - name: upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: rk356x_sdk_v1.1.2_20210720.tar.gz
+        path: /opt/linux/rk356x_sdk_v1.1.2_20210720.tar.gz
     
     - name: decompress-sdk
       run: |
