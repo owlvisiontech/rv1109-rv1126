@@ -40,7 +40,7 @@ jobs:
     - name: Download workflow artifact
       uses: dawidd6/action-download-artifact@v2.15.0
       with:
-        workflow: cmake.yml
+        workflow: RV1109-RV1126 Firmware Building
         name: RV1126_RV1109_SDK_2.2.2.tar.xz
         path: /opt/sdk/RV1126_RV1109_SDK_2.2.2.tar.xz
     
