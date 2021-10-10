@@ -29,7 +29,7 @@ jobs:
       id: cache-buildroot
       uses: actions/cache@v2
       with:
-        path: $GITHUB_WORKSPACE/.buildroot-ccache/
+        path: ~/.buildroot-ccache/
         key: ${{ runner.os }}-buildroot
 
     - name: sysprepare
