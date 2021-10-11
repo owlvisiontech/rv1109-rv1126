@@ -117,5 +117,4 @@ jobs:
     - name: upload firmware
       uses: actions/upload-artifact@v2
       with:
-        name: Firmware
-        path: /opt/linux/RV1126_RV1109_SDK_2.2.2/IMAGE
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.2/IMAGE/*
