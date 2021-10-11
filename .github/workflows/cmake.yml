@@ -44,35 +44,8 @@ jobs:
         cd /opt/sdk/
         curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb
 
-    - name: prepare-tools
-      run: |
-        mkdir -p /opt/sdk/
-        cd /opt/sdk/
-
-        sudo apt-get update
-        sudo apt-get install curl gnupg2 \
-        openssh-server \
-        android-tools-adb \
-        vim net-tools git \
-        cmake \
-        tree \
-        minicom \
-        gawk pv \
-        bison \
-        flex \
-        libssl-dev \
-        device-tree-compiler \
-        gcc-aarch64-linux-gnu mtools parted libudev-dev \
-        libusb-1.0-0-dev autoconf autotools-dev libsigsegv2 m4 intltool libdrm-dev curl sed \
-        make binutils build-essential gcc g++ bash patch gzip gawk bzip2 \
-        perl tar cpio python unzip rsync file bc wget libncurses5 u-boot-tools \
-        cvs mercurial rsync openssh-client subversion expect \
-        fakeroot liblz4-tool libtool keychain libncurses-dev -y
-
-        curl https://mega.nz/linux/MEGAsync/Debian_10.0/amd64/megacmd-Debian_10.0_amd64.deb --output megacmd.deb && \
-        sudo apt install ./megacmd.deb -y && \
-        sudo apt-get remove -y curl && \
-        sudo apt-get clean
+    - name: prepare-buildroot
+      uses: owlvisiontech/buildroot-prepare@main
 
     - name: download-sdk
       run: |
