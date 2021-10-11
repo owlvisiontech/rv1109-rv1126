@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu
+    runs-on: ubuntu-centre
 
     steps:
 
