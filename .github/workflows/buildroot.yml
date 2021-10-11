@@ -111,8 +111,25 @@ jobs:
         echo "config finished!"
         ./build.sh
 
-    - name: upload firmware
+    - name: scan firmware
+      id: scan-dirs
+      uses: owlvisiontech/scan-directory@main
+      with:
+        path: /opt/linux/RV1126_RV1109_SDK_2.2.2/IMAGE
+    - run: echo dirlist ${{ steps.scan-dirs.outputs.dirlist }} 
+      shell: bash
+    outputs:
+     dirlist:  ${{ steps.scan-dirs.outputs.dirlist }} 
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.build.outputs.dirlist)}}
+    steps:
+    - name: upload files
+      id: upload-files
       uses: actions/upload-artifact@v2
       with:
-        name: Firmware
-        path: /opt/linux/RV1126_RV1109_SDK_2.2.2/IMAGE
+        name: ${{ matrix.dirs.name }}
+        path: ${{ matrix.dirs.path }}
